@@ -1,0 +1,20 @@
+* empleados web (puerto 3333): app web con seguridad (profe - profe) que tira del microservicio anterior.
+Ahora mismo están funcionando los get, faltarían invocar el put, el post y el delete. La seguridad rest está
+cableada en el server, no sé si se puede sacar del Principal que se suministra en la app web. Utiliza
+Java Config para generar todos los beans de la app. Accediendo directamente a localhost:3333 ya aparecen
+los dos enlaces posibles. El /logout no funciona (ya empezamos... Habrá que mirar cómo hacer logout en
+spring boot)
+
+	- EmpleadosWebService: clase de negocio que interactúa con el microservicio. Para ello se
+	  sirve de un @LoadBalanced RestTemplate (el @LoadBalanced delega en Eureka para la localización
+	  del microservicio, el RestTemplate se configura con seguridad en EmpleadosWebServer)
+	  
+	- EmpleadosWebSecurityConfig: configuración de seguridad.
+	
+	- EmpleadosWebController: controlador. Delega en EmpleadosWebService para la interacción
+	  con el micro servicio.
+	  
+	- EmpleadosWebServer: inicia el servidor y hace de configurador de beans.
+	  
+	- EmpleadoValidator: validador spring de cif, nombre y apps obligatorios y de edad positiva. Utiliza
+	  el fichero de recursos para los parámetros de los mensajes (Name ó Nombre, por ejemplo).
