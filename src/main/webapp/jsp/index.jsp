@@ -11,7 +11,11 @@
 <body>
 <p>
 <a href="gestEmpleados.do">App de empleados</a>
-<a href="logout">Logout</a>
+</p>
+<p>
+<form method="post" action="logout">
+<input type="submit" value="Logout" />
+</form>
 </p>
 </body>
 </html>

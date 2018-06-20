@@ -29,16 +29,7 @@ public class EmpleadosWebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.and()
 			.formLogin()
 				.and()
-			.httpBasic()
-				.and()
-			.logout()
-				.logoutSuccessUrl("/doLogout")
-			/* Este código está para poder hacer logout sin necesidad de
-			 * deshabilitar csrf con .csrf().disable()
-			 */
-				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-				.deleteCookies("JSESSIONID")
-				.invalidateHttpSession(true);;			
+			.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/");			
 	}
 
 		
