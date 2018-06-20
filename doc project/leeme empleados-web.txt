@@ -2,7 +2,7 @@
 Ahora mismo están funcionando los get, faltarían invocar el put, el post y el delete. La seguridad rest está
 cableada en el server, no sé si se puede sacar del Principal que se suministra en la app web. Utiliza
 Java Config para generar todos los beans de la app. Accediendo directamente a localhost:3333 ya aparecen
-los dos enlaces posibles. El /logout no funciona. Ver más abajo.
+los dos enlaces posibles. El /logout redirige a /doLogout - logout.jsp, pero sigue sin funcionar. Ver más abajo.
 
 	- EmpleadosWebService: clase de negocio que interactúa con el microservicio. Para ello se
 	  sirve de un @LoadBalanced RestTemplate (el @LoadBalanced delega en Eureka para la localización
@@ -24,4 +24,5 @@ el logout por defecto sólo
 funciona cuando hacemos una petición de logout POST enviando un csrf (ver apuntes de seguridad
 spring). Para habilitar el logout get lo podemos hacer deshabilitando el csrf (como hacemos
 en el proyecto mencionado al configurar la seguridad de forma declarativa) o mediante el código que
-se encuentra en la clase WebSecurityConfig del mismo proyecto (que respeta el csrf).
+se encuentra en la clase WebSecurityConfig del mismo proyecto (que respeta el csrf). AÚN HECHO ESTO
+SIGUE SIN FUNCIONAR.

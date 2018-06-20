@@ -24,14 +24,21 @@ public class EmpleadosWebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 			.authorizeRequests()
-				.antMatchers("/").permitAll()
 				.antMatchers("/gestEmpleados", "/gestEmpleados*").hasRole("ADMIN")
+				.anyRequest().permitAll()
+				.and()
+			.formLogin()
 				.and()
 			.httpBasic()
 				.and()
-			.csrf().disable()
 			.logout()
-				.logoutSuccessUrl("/");			
+				.logoutSuccessUrl("/doLogout")
+			/* Este código está para poder hacer logout sin necesidad de
+			 * deshabilitar csrf con .csrf().disable()
+			 */
+				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+				.deleteCookies("JSESSIONID")
+				.invalidateHttpSession(true);;			
 	}
 
 		
