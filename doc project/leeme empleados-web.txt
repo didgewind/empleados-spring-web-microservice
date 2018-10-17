@@ -1,21 +1,26 @@
 Esta versión tira de spring boot 1.5
 
 * empleados web (puerto 3333): app web con seguridad (profe o admin) que tira del microservicio anterior.
-Ahora mismo están funcionando los get, faltarían invocar el put, el post y el delete. La seguridad rest está
-cableada en el server, no sé si se puede sacar del Principal que se suministra en la app web (ver detalles
-más abajo). Utiliza
-Java Config para generar todos los beans de la app. Accediendo directamente a localhost:3333 ya aparecen
+Ahora mismo están funcionando los get y el delete. Hemos modificado la forma de obtener el RestTemplate
+para poder propagar el usuario autenticado en el servidor web al servidor rest (es decir, utilizar el usuario
+que está haciendo esa llamada en ese momento). Hay que hacer notar que para ello hay que configurar el
+AuthenticationManagerBuilder (en la clase de config de seguridad) con eraseCredentials(false), para
+que no elimine el password del Authentication nada más hacer el login, y así poder acceder a él
+en cada petición que redirigamos al servidor Rest. También hemos dejado de utilizar @LoadBalanced porque
+los únicos ejemplos que encontramos siempre inyectan el RestTemplate, y para utilizar autenticación
+dinámica hay que instanciar el RestTemplate por cada petición. Quizás se podría mirar lo de los beans
+proxy-scoped...
+
+Usamos Java Config para generar todos los beans de la app. Accediendo directamente a localhost:3333 ya aparecen
 los dos enlaces posibles. El /logout funciona con post (en index.jsp) o con get (/logout).
 
-	- EmpleadosWebService: clase de negocio que interactúa con el microservicio. Para ello se
-	  sirve de un @LoadBalanced RestTemplate (el @LoadBalanced delega en Eureka para la localización
-	  del microservicio). Este RestTemplate se configura con seguridad en EmpleadosWebServer para
-	  poder acceder al microservicio Rest (es decir, la app web pide credenciales para acceder pero
-	  esas credenciales no se utilizan, sino que están cableadas directamente a 'profe' - 'profe'
-	  en la línea 49 de EmpleadosWebServer). Si no usáramos Ribbon para hacer balance de carga
-	  en el cliente entonces quizás podríamos inyectar sólo el RestTemplateBuilder y justo al
-	  hacer la petición recuperar el principal y la password, generar el RestTemplate y usarlo
-	  con las credenciales actuales (lo voy a investigar en un branch ahora mismo, a ver qué consigo) 
+	- EmpleadosWebService: clase de negocio que interactúa con el microservicio. 
+	  Como ahora no usamos @LoadBalanced, inyectamos en su lugar un DiscoveryClient
+	  para consultar al servidor Eureka y obtener la Url del servidor de empleados
+	  a partir de su alias (visto en https://www.javainuse.com/spring/spring_eurekaregister4). 
+	  Para conseguir seguridad dinámica inyectamos el RestTemplateBuilder 
+	  y para cada petición recuperamos el principal y la password y con ellos generamos 
+	  un RestTemplate autenticado. 
 	  
 	- EmpleadosWebSecurityConfig: configuración de seguridad.
 	

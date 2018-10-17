@@ -15,7 +15,7 @@ public class EmpleadosWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		auth
+		auth.eraseCredentials(false)	// Para reutilizar las credenciales para acceder a los microservicios
 			.inMemoryAuthentication()
 			.withUser("profe").password("profe").roles("USER")
 				.and()
@@ -33,7 +33,6 @@ public class EmpleadosWebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.and()
 			.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/");			
 	}
-
-		
+	
 	
 }

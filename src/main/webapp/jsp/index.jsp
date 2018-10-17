@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <!DOCTYPE html>
 <html>
@@ -13,9 +14,9 @@
 <a href="gestEmpleados.do">App de empleados</a>
 </p>
 <p>
-<form method="post" action="logout">
+<form:form action="logout">
 <input type="submit" value="Logout" />
-</form>
+</form:form>
 </p>
 </body>
 </html>
