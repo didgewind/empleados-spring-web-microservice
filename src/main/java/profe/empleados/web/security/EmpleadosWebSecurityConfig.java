@@ -17,14 +17,16 @@ public class EmpleadosWebSecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 		auth
 			.inMemoryAuthentication()
-				.withUser("profe").password("profe").roles("ADMIN");
+			.withUser("profe").password("profe").roles("USER")
+				.and()
+			.withUser("admin").password("admin").roles("ADMIN");
 	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 			.authorizeRequests()
-				.antMatchers("/gestEmpleados", "/gestEmpleados*").hasRole("ADMIN")
+				.antMatchers("/gestEmpleados", "/gestEmpleados*").hasAnyRole("USER", "ADMIN")
 				.anyRequest().permitAll()
 				.and()
 			.formLogin()

@@ -39,12 +39,12 @@ public class EmpleadosWebServer {
 	}
 
 	/**
-	 * A customized RestTemplate that has the ribbon load balancer build in.
+	 * A customized RestTemplate that has the ribbon load balancer built in.
 	 * 
 	 * @return
 	 */
 	@LoadBalanced
-	@Bean
+	@Bean // Implica @Autowired para los parámetros
 	RestTemplate restTemplate(RestTemplateBuilder builder) {
 		return builder.basicAuthorization("profe", "profe").build();
 	}

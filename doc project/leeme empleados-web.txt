@@ -1,12 +1,21 @@
-* empleados web (puerto 3333): app web con seguridad (profe - profe) que tira del microservicio anterior.
+Esta versión tira de spring boot 1.5
+
+* empleados web (puerto 3333): app web con seguridad (profe o admin) que tira del microservicio anterior.
 Ahora mismo están funcionando los get, faltarían invocar el put, el post y el delete. La seguridad rest está
-cableada en el server, no sé si se puede sacar del Principal que se suministra en la app web. Utiliza
+cableada en el server, no sé si se puede sacar del Principal que se suministra en la app web (ver detalles
+más abajo). Utiliza
 Java Config para generar todos los beans de la app. Accediendo directamente a localhost:3333 ya aparecen
 los dos enlaces posibles. El /logout funciona con post (en index.jsp) o con get (/logout).
 
 	- EmpleadosWebService: clase de negocio que interactúa con el microservicio. Para ello se
 	  sirve de un @LoadBalanced RestTemplate (el @LoadBalanced delega en Eureka para la localización
-	  del microservicio, el RestTemplate se configura con seguridad en EmpleadosWebServer)
+	  del microservicio). Este RestTemplate se configura con seguridad en EmpleadosWebServer para
+	  poder acceder al microservicio Rest (es decir, la app web pide credenciales para acceder pero
+	  esas credenciales no se utilizan, sino que están cableadas directamente a 'profe' - 'profe'
+	  en la línea 49 de EmpleadosWebServer). Si no usáramos Ribbon para hacer balance de carga
+	  en el cliente entonces quizás podríamos inyectar sólo el RestTemplateBuilder y justo al
+	  hacer la petición recuperar el principal y la password, generar el RestTemplate y usarlo
+	  con las credenciales actuales (lo voy a investigar en un branch ahora mismo, a ver qué consigo) 
 	  
 	- EmpleadosWebSecurityConfig: configuración de seguridad.
 	
@@ -24,5 +33,4 @@ el logout por defecto sólo
 funciona cuando hacemos una petición de logout POST enviando un csrf (ver apuntes de seguridad
 spring). Para habilitar el logout get lo podemos hacer deshabilitando el csrf (como hacemos
 en el proyecto mencionado al configurar la seguridad de forma declarativa) o mediante el código que
-se encuentra en la clase WebSecurityConfig del mismo proyecto (que respeta el csrf). Me da la impresión
-de que la clave para que funcione es eliminar el .httpBasic() y dejar sólo el .formLogin()
+se encuentra en la clase WebSecurityConfig del mismo proyecto (que respeta el csrf).
