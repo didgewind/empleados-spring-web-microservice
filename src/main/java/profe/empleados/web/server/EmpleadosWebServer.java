@@ -21,10 +21,9 @@ import profe.empleados.web.validator.EmpleadoValidator;
 public class EmpleadosWebServer {
 	
 	/**
-	 * URL uses the logical name of account-service - upper or lower case,
-	 * doesn't matter.
+	 * Logical name of account-service
 	 */
-	public static final String EMPLEADOS_SERVICE_URL = "http://EMPLEADOS-SERVICE";
+	public static final String EMPLEADOS_APPLICATION = "empleados-service";
 
 	/**
 	 * Run the application using Spring Boot and an embedded servlet engine.
@@ -36,17 +35,6 @@ public class EmpleadosWebServer {
 		// Tell server to look for web-server.properties or web-server.yml
 		System.setProperty("spring.config.name", "empleados-web-server");
 		SpringApplication.run(EmpleadosWebServer.class, args);
-	}
-
-	/**
-	 * A customized RestTemplate that has the ribbon load balancer built in.
-	 * 
-	 * @return
-	 */
-	@LoadBalanced
-	@Bean // Implica @Autowired para los parámetros
-	RestTemplate restTemplate(RestTemplateBuilder builder) {
-		return builder.basicAuthorization("profe", "profe").build();
 	}
 	
 	@Bean
@@ -61,7 +49,7 @@ public class EmpleadosWebServer {
 
 	@Bean
 	public EmpleadosWebService webService() {
-		return new EmpleadosWebService(EMPLEADOS_SERVICE_URL);
+		return new EmpleadosWebService(EMPLEADOS_APPLICATION);
 	}
 
 	@Bean

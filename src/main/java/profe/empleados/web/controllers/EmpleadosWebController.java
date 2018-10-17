@@ -89,7 +89,7 @@ public class EmpleadosWebController {
 		negocio.modificaEmpleado(empleado);
 		model.addAttribute("mensaje", "Empleado modificado");
 		return "empleados";
-	}
+	}*/
 	
 	@RequestMapping(params={"elimina"}, method=RequestMethod.POST)
 	public String eliminaEmpleado(@Valid @ModelAttribute Empleado empleado, 
@@ -97,11 +97,11 @@ public class EmpleadosWebController {
 		if (result.hasFieldErrors("cif")) {
 			return "empleados";
 		}
-		negocio.eliminaEmpleado(empleado.getCif());
+		service.eliminaEmpleado(empleado.getCif());
 		model.addAttribute("mensaje", "Empleado eliminado");
 		return "empleados";
 	}
-	*/
+	
 
 	
 }

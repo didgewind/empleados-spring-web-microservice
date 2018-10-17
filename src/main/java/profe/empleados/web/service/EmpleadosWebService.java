@@ -1,13 +1,16 @@
 package profe.empleados.web.service;
 
 
-import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -23,29 +26,47 @@ import profe.empleados.web.model.Empleado;
 public class EmpleadosWebService {
 
 	@Autowired
-	@LoadBalanced
-	protected RestTemplate restTemplate;
+	protected RestTemplateBuilder restTemplateBuilder;
+	
+	@Autowired
+	private DiscoveryClient discoveryClient;
 
-	protected String serviceUrl;
+	protected String serviceAlias;
 
 	protected Logger logger = Logger.getLogger(EmpleadosWebService.class
 			.getName());
 
-	public EmpleadosWebService(String serviceUrl) {
-		this.serviceUrl = serviceUrl.startsWith("http") ? serviceUrl
-				: "http://" + serviceUrl;
+	public EmpleadosWebService(String serviceAlias) {
+		this.serviceAlias = serviceAlias;
+	}
+	
+	private RestTemplate getRestTemplateWithCurrentAuth() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		return restTemplateBuilder.basicAuthorization(auth.getName(), (String) auth.getCredentials()).build();
 	}
 
+	private String getBaseUrl() {
+/*		logger.info("serviceAlias: " + this.serviceAlias);
+		logger.info("servicios: " + discoveryClient.getServices());*/
+		List<ServiceInstance> instances = discoveryClient.getInstances(this.serviceAlias);
+		ServiceInstance serviceInstance = instances.get(0);
+		return serviceInstance.getUri().toString();
+	}
+	
 	public Empleado getEmpleado(String cif) {
-		return restTemplate.getForObject(serviceUrl + "/empleados/{cif}",
+		return getRestTemplateWithCurrentAuth().getForObject(this.getBaseUrl() + "/empleados/{cif}",
 				Empleado.class, cif);
+	}
+
+	public void eliminaEmpleado(String cif) {
+		getRestTemplateWithCurrentAuth().delete(this.getBaseUrl() + "/empleados/{cif}", cif);
 	}
 
 	public List<Empleado> getAllEmpleados() {
 		Empleado[] Empleados = null;
 
 		try {
-			Empleados = restTemplate.getForObject(serviceUrl
+			Empleados = getRestTemplateWithCurrentAuth().getForObject(this.getBaseUrl()
 					+ "/empleados", Empleado[].class);
 		} catch (HttpClientErrorException e) {
 			System.out.println("error en el getAllEmpleados");
