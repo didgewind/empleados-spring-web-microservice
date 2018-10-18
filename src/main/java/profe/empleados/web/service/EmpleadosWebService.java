@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -29,7 +29,7 @@ public class EmpleadosWebService {
 	protected RestTemplateBuilder restTemplateBuilder;
 	
 	@Autowired
-	private DiscoveryClient discoveryClient;
+	private LoadBalancerClient loadBalancer;
 
 	protected String serviceAlias;
 
@@ -46,10 +46,8 @@ public class EmpleadosWebService {
 	}
 
 	private String getBaseUrl() {
-/*		logger.info("serviceAlias: " + this.serviceAlias);
-		logger.info("servicios: " + discoveryClient.getServices());*/
-		List<ServiceInstance> instances = discoveryClient.getInstances(this.serviceAlias);
-		ServiceInstance serviceInstance = instances.get(0);
+		ServiceInstance serviceInstance = loadBalancer.choose(this.serviceAlias);
+		logger.info("Estamos accediendo al servicio en " + serviceInstance.getUri());
 		return serviceInstance.getUri().toString();
 	}
 	
