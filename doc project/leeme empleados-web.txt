@@ -1,4 +1,4 @@
-Esta versión tira de spring boot 1.5
+Esta versión tira de spring boot 2.0
 
 * empleados web (puerto 3333): app web con seguridad (profe o admin) que tira del microservicio anterior.
 Ahora mismo están funcionando los get y el delete. Hemos modificado la forma de obtener el RestTemplate
@@ -22,7 +22,9 @@ los dos enlaces posibles. El /logout funciona con post (en index.jsp) o con get 
 	  y para cada petición recuperamos el principal y la password y con ellos generamos 
 	  un RestTemplate autenticado. 
 	  
-	- EmpleadosWebSecurityConfig: configuración de seguridad.
+	- EmpleadosWebSecurityConfig: configuración de seguridad. Añadimos {noop} como prefijo al
+	  declarar las contraseñas (transparente para el cliente) para saltarnos el requerimiento
+	  de security 5.x de que las contraseñas estén hashcodeadas.
 	
 	- EmpleadosWebController: controlador. Delega en EmpleadosWebService para la interacción
 	  con el micro servicio.

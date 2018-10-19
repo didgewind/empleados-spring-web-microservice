@@ -11,7 +11,7 @@
 </head>
 <body>
 <p>
-<a href="gestEmpleados.do">App de empleados</a>
+<a href="gestEmpleados">App de empleados</a>
 </p>
 <p>
 <form:form action="logout">
