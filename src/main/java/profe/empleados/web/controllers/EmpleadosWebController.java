@@ -58,7 +58,7 @@ public class EmpleadosWebController {
 	
 	@RequestMapping(params={"muestraTodos"}, method=RequestMethod.POST)
 	public String getAll(Model model) {
-		model.addAttribute("listaEmpleados", service.getAllEmpleados());
+		model.addAttribute("listaEmpleados", service.getAllEmpleadosWithFeign());
 		model.addAttribute("opcion", "muestraTodos");
 		return "empleados";
 	}

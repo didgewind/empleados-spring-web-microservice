@@ -11,6 +11,10 @@ los únicos ejemplos que encontramos siempre inyectan el RestTemplate, y para ut
 dinámica hay que instanciar el RestTemplate por cada petición. Quizás se podría mirar lo de los beans
 proxy-scoped...
 
+También estamos usando Feign (peticiones rest declarativas). Como el server Rest está protegido pasa lo
+mismo que cuando usábamos @LoadBalanced, que tenemos que cablear el usuario y el password, porque
+delegamos en el framework para la creación del bean feign client.
+
 Usamos Java Config para generar todos los beans de la app. Accediendo directamente a localhost:3333 ya aparecen
 los dos enlaces posibles. El /logout funciona con post (en index.jsp) o con get (/logout).
 
@@ -20,7 +24,10 @@ los dos enlaces posibles. El /logout funciona con post (en index.jsp) o con get 
 	  de empleados a partir de su alias (visto en https://www.javainuse.com/spring/spring_ribbon). 
 	  Para conseguir seguridad dinámica inyectamos el RestTemplateBuilder 
 	  y para cada petición recuperamos el principal y la password y con ellos generamos 
-	  un RestTemplate autenticado. 
+	  un RestTemplate autenticado.
+	  
+	  Implementa un método nuevo (getAllEmpleadosWithFeign()) que utiliza Feign para recuperar
+	  todos los empleados
 	  
 	- EmpleadosWebSecurityConfig: configuración de seguridad. Añadimos {noop} como prefijo al
 	  declarar las contraseñas (transparente para el cliente) para saltarnos el requerimiento

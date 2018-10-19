@@ -13,6 +13,7 @@ import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
@@ -23,7 +24,6 @@ import profe.empleados.web.model.Empleado;
  * 
  * @author Paul Chapman - Versión de Enrique Pedraza
  */
-@Service
 public class EmpleadosWebService {
 
 	@Autowired
@@ -31,6 +31,9 @@ public class EmpleadosWebService {
 	
 	@Autowired
 	private LoadBalancerClient loadBalancer;
+	
+	@Autowired
+	private EmpleadosFeignClient feignClient;
 
 	protected String serviceAlias;
 
@@ -67,6 +70,11 @@ public class EmpleadosWebService {
 		}
 		return true;
 
+	}
+	
+	public List<Empleado> getAllEmpleadosWithFeign() {
+		logger.info("Llamada usando feign");
+		return feignClient.getAllEmpleados();
 	}
 
 	public List<Empleado> getAllEmpleados() {
