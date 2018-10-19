@@ -3,6 +3,7 @@ package profe.empleados.web.service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,8 +57,16 @@ public class EmpleadosWebService {
 				Empleado.class, cif);
 	}
 
-	public void eliminaEmpleado(String cif) {
-		getRestTemplateWithCurrentAuth().delete(this.getBaseUrl() + "/empleados/{cif}", cif);
+	public boolean eliminaEmpleado(String cif) {
+		try {
+			getRestTemplateWithCurrentAuth().delete(this.getBaseUrl() + "/empleados/{cif}", cif);
+		} catch (HttpClientErrorException e) {
+			logger.info("error al eliminar el empleado");
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+
 	}
 
 	public List<Empleado> getAllEmpleados() {
@@ -67,7 +76,7 @@ public class EmpleadosWebService {
 			Empleados = getRestTemplateWithCurrentAuth().getForObject(this.getBaseUrl()
 					+ "/empleados", Empleado[].class);
 		} catch (HttpClientErrorException e) {
-			System.out.println("error en el getAllEmpleados");
+			logger.info("error en el getAllEmpleados");
 			e.printStackTrace();
 		}
 

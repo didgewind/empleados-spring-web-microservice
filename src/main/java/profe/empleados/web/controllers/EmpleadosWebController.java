@@ -62,6 +62,18 @@ public class EmpleadosWebController {
 		model.addAttribute("opcion", "muestraTodos");
 		return "empleados";
 	}
+	
+	@RequestMapping(params={"elimina"}, method=RequestMethod.POST)
+	public String eliminaEmpleado(@Valid @ModelAttribute Empleado empleado, 
+			BindingResult result, Model model) {
+		if (result.hasFieldErrors("cif")) {
+			return "empleados";
+		}
+		String mensaje = service.eliminaEmpleado(empleado.getCif()) ?
+			"Empleado eliminado" : "Error al eliminar el empleado. ¿Tienes permisos de eliminación?";
+		model.addAttribute("mensaje", mensaje);
+		return "empleados";
+	}
 
 /*	@RequestMapping(params={"inserta"}, method=RequestMethod.POST)
 	public String insertaEmpleado(@Valid @ModelAttribute Empleado empleado, 
@@ -90,18 +102,5 @@ public class EmpleadosWebController {
 		model.addAttribute("mensaje", "Empleado modificado");
 		return "empleados";
 	}*/
-	
-	@RequestMapping(params={"elimina"}, method=RequestMethod.POST)
-	public String eliminaEmpleado(@Valid @ModelAttribute Empleado empleado, 
-			BindingResult result, Model model) {
-		if (result.hasFieldErrors("cif")) {
-			return "empleados";
-		}
-		service.eliminaEmpleado(empleado.getCif());
-		model.addAttribute("mensaje", "Empleado eliminado");
-		return "empleados";
-	}
-	
-
 	
 }
