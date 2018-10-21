@@ -2,13 +2,12 @@ package profe.empleados.web.server;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.cloud.openfeign.FeignClientsConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.context.annotation.Import;
 
 import profe.empleados.web.controllers.EmpleadosWebController;
 import profe.empleados.web.controllers.HomeController;
@@ -17,9 +16,10 @@ import profe.empleados.web.service.EmpleadosWebService;
 import profe.empleados.web.validator.EmpleadoValidator;
 
 @SpringBootApplication
-@EnableFeignClients(basePackages = "profe.empleados.web.service")
+//@EnableFeignClients(basePackages = "profe.empleados.web.service")
 @EnableDiscoveryClient
 @ComponentScan(useDefaultFilters = false) // Disable component scanner
+@Import(FeignClientsConfiguration.class)
 public class EmpleadosWebServer {
 	
 	/**

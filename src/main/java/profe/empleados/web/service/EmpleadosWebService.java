@@ -3,7 +3,6 @@ package profe.empleados.web.service;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +11,16 @@ import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import feign.Client;
+import feign.Contract;
+import feign.Feign;
+import feign.FeignException;
+import feign.auth.BasicAuthRequestInterceptor;
+import feign.codec.Decoder;
+import feign.codec.Encoder;
 import profe.empleados.web.model.Empleado;
 
 /**
@@ -32,9 +36,21 @@ public class EmpleadosWebService {
 	@Autowired
 	private LoadBalancerClient loadBalancer;
 	
-	@Autowired
-	private EmpleadosFeignClient feignClient;
+/*	@Autowired
+	private EmpleadosFeignClient feignClient;*/
 
+	@Autowired
+	private Decoder decoder;
+	
+	@Autowired
+	private Encoder encoder;
+	
+	@Autowired
+	private Client client;
+	
+	@Autowired
+	private Contract contract;
+	
 	protected String serviceAlias;
 
 	protected Logger logger = Logger.getLogger(EmpleadosWebService.class
@@ -55,6 +71,16 @@ public class EmpleadosWebService {
 		return serviceInstance.getUri().toString();
 	}
 	
+	private EmpleadosFeignClient getFeignClientWithCurrentAuth() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		return Feign.builder().client(client)
+			.encoder(encoder)
+			.decoder(decoder)
+			.contract(contract)
+			.requestInterceptor(new BasicAuthRequestInterceptor(auth.getName(), (String) auth.getCredentials()))
+			.target(EmpleadosFeignClient.class, "http://" + this.serviceAlias);
+	}
+	
 	public Empleado getEmpleado(String cif) {
 		return getRestTemplateWithCurrentAuth().getForObject(this.getBaseUrl() + "/empleados/{cif}",
 				Empleado.class, cif);
@@ -69,11 +95,24 @@ public class EmpleadosWebService {
 			return false;
 		}
 		return true;
-
+	}
+	
+	public boolean eliminaEmpleadoWithFeign(String cif) {
+		try {
+			logger.info("Llamada usando feign");
+			EmpleadosFeignClient feignClient = getFeignClientWithCurrentAuth();
+			feignClient.eliminaEmpleado(cif);
+		} catch (FeignException e) {
+			logger.info("error al eliminar el empleado");
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 	
 	public List<Empleado> getAllEmpleadosWithFeign() {
 		logger.info("Llamada usando feign");
+		EmpleadosFeignClient feignClient = getFeignClientWithCurrentAuth();
 		return feignClient.getAllEmpleados();
 	}
 

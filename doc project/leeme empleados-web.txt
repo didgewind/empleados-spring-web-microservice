@@ -11,9 +11,8 @@ los únicos ejemplos que encontramos siempre inyectan el RestTemplate, y para ut
 dinámica hay que instanciar el RestTemplate por cada petición. Quizás se podría mirar lo de los beans
 proxy-scoped...
 
-También estamos usando Feign (peticiones rest declarativas). Como el server Rest está protegido pasa lo
-mismo que cuando usábamos @LoadBalanced, que tenemos que cablear el usuario y el password, porque
-delegamos en el framework para la creación del bean feign client.
+También estamos usando Feign (peticiones rest declarativas). Creamos el cliente Feign manualmente
+por cada petición, para poder propagar las credenciales.
 
 Usamos Java Config para generar todos los beans de la app. Accediendo directamente a localhost:3333 ya aparecen
 los dos enlaces posibles. El /logout funciona con post (en index.jsp) o con get (/logout).

@@ -69,7 +69,7 @@ public class EmpleadosWebController {
 		if (result.hasFieldErrors("cif")) {
 			return "empleados";
 		}
-		String mensaje = service.eliminaEmpleado(empleado.getCif()) ?
+		String mensaje = service.eliminaEmpleadoWithFeign(empleado.getCif()) ?
 			"Empleado eliminado" : "Error al eliminar el empleado. ¿Tienes permisos de eliminación?";
 		model.addAttribute("mensaje", mensaje);
 		return "empleados";
