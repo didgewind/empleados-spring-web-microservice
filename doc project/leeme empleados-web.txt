@@ -14,6 +14,8 @@ proxy-scoped...
 También estamos usando Feign (peticiones rest declarativas). Creamos el cliente Feign manualmente
 por cada petición, para poder propagar las credenciales.
 
+El servicio web está refactorizado para separar el código Feign del que utiliza directamente Ribbon.
+
 Usamos Java Config para generar todos los beans de la app. Accediendo directamente a localhost:3333 ya aparecen
 los dos enlaces posibles. El /logout funciona con post (en index.jsp) o con get (/logout).
 
