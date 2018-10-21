@@ -4,7 +4,6 @@ import javax.annotation.Resource;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -58,7 +57,7 @@ public class EmpleadosWebController {
 	
 	@RequestMapping(params={"muestraTodos"}, method=RequestMethod.POST)
 	public String getAll(Model model) {
-		model.addAttribute("listaEmpleados", service.getAllEmpleadosWithFeign());
+		model.addAttribute("listaEmpleados", service.getAllEmpleados());
 		model.addAttribute("opcion", "muestraTodos");
 		return "empleados";
 	}
@@ -69,7 +68,7 @@ public class EmpleadosWebController {
 		if (result.hasFieldErrors("cif")) {
 			return "empleados";
 		}
-		String mensaje = service.eliminaEmpleadoWithFeign(empleado.getCif()) ?
+		String mensaje = service.eliminaEmpleado(empleado.getCif()) ?
 			"Empleado eliminado" : "Error al eliminar el empleado. ¿Tienes permisos de eliminación?";
 		model.addAttribute("mensaje", mensaje);
 		return "empleados";
