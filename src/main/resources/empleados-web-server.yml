@@ -2,8 +2,6 @@
 spring:
   application:
     name: empleados-web-service  # Identify this application
-  freemarker:
-    enabled: false     # Ignore Eureka dashboard FreeMarker templates (¿hace falta?)
 # ViewResolver
   mvc:
      view:
