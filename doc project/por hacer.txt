@@ -1,2 +1,12 @@
-+ Modificar el usuario y password del RestTemplate para cada petición, o cada vez
-que se haga un login (con los filtros, quizás)
+- Implementar control de errores en empleados-boot y en web
+
+- Parámetros ribbon (política, iping, etc).
+
+- Autenticación por jwt (servicio de autenticación separado, propagación del token)
+
+- Simulación transacción distribuida (microservicio de departamentos? direcciones?). Utilizar
+CompletableFuture (ver ej en java 8 new features book)?
+
+- mirar webclient (en contraposición a resttemplate)
+
+- Mirar curl

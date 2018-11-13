@@ -13,6 +13,7 @@
 <p>
 <a href="gestEmpleados">App de empleados</a>
 </p>
+<p>Los usuarios son profe - profe y admin - admin
 <p>
 <form:form action="logout">
 <input type="submit" value="Logout" />

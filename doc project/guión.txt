@@ -1,0 +1,29 @@
+- Qué son microservicios
+- Beneficios. Por qué se usan
+- Arquitectura típica
+- Qué son Spring Boot y Spring Cloud
+- Fundamentos de Spring Boot (parent pom, starters, convención vs configuración)
+- Tres formas de crear el skeleton de un proyecto spring boot:
+	- initializer (web)
+	- spring boot cli
+	- proyecto maven (skip archetype selection)
+	
+- Primer ejemplo: Hello Rest! (usar curl o cliente navegador)
+- Empaquetar el jar y lanzarlo desde la consola 
+	(https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#using-boot-running-as-a-packaged-application)
+- Crear cliente web con RestTemplate (new RestTemplate)
+- Ejemplo de microservicio más complejo. Simulación de bd
+	(microservicio bd-empleados-service, una única clase anotada con
+	@RestController y @SpringBootApplication)
+- Otro microservicio que tira de esta bd (empleados-rest-service)
+- Eureka Server. Registrar servicios y buscar con DiscoveryService
+	(commit Propagamos usuario autenticado desde app web a server rest)
+- Control de errores (con try... catch y RestTemplateErrorHandler
+- Cliente web más complejo (con formulario y 5 botones)
+- Explicar Ribbon y @LoadBalanced. Lanzar varias instancias del servicio
+- Seguridad básica
+- Ribbon con autenticación
+- Feign (seg cableada)
+- Feign con cliente instanciado manualmente (con autenticación)
+- Transacciones
+

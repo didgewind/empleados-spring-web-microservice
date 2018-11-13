@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import profe.empleados.web.model.Empleado;
 import profe.empleados.web.service.EmpleadosWebService;
+import profe.empleados.web.service.exceptions.EmpleadosWebNotAuthorizedException;
+import profe.empleados.web.service.exceptions.EmpleadosWebResourceDuplicatedException;
+import profe.empleados.web.service.exceptions.EmpleadosWebResourceNotFoundException;
 
 @Controller
 @RequestMapping("/gestEmpleados")
@@ -51,7 +54,13 @@ public class EmpleadosWebController {
 		if (result.hasFieldErrors("cif")) {
 			return "empleados";
 		}
-		model.addAttribute("empleado", service.getEmpleado(empleado.getCif().trim()));
+		String mensaje = null;
+		try {
+			model.addAttribute("empleado", service.getEmpleado(empleado.getCif().trim()));
+		} catch (EmpleadosWebResourceNotFoundException e) {
+			model.addAttribute("mensaje", "Error al recuperar el empleado. Parece que el empleado con cif "
+					+ empleado.getCif() + " no existe");
+		}
 		return "empleados";
 	}
 	
@@ -68,38 +77,61 @@ public class EmpleadosWebController {
 		if (result.hasFieldErrors("cif")) {
 			return "empleados";
 		}
-		String mensaje = service.eliminaEmpleado(empleado.getCif()) ?
-			"Empleado eliminado" : "Error al eliminar el empleado. ¿Tienes permisos de eliminación?";
+		String mensaje = null;
+		try {
+			service.eliminaEmpleado(empleado.getCif());
+			mensaje = "Empleado eliminado";
+		} catch (EmpleadosWebResourceNotFoundException e) {
+			mensaje = "Error al eliminar el empleado. Parece que el empleado con cif "
+					+ empleado.getCif() + " no existe";
+		} catch (EmpleadosWebNotAuthorizedException e) {
+			mensaje = "Error al eliminar el empleado. ¿Tienes permisos de eliminación?";
+		}			
+		model.addAttribute("opcion", "elimina");
 		model.addAttribute("mensaje", mensaje);
 		return "empleados";
 	}
 
-/*	@RequestMapping(params={"inserta"}, method=RequestMethod.POST)
+	@RequestMapping(method=RequestMethod.POST, params={"inserta"})
 	public String insertaEmpleado(@Valid @ModelAttribute Empleado empleado, 
 			BindingResult result, Model model) {
 		if (result.hasErrors()) {
 			return "empleados";
 		}
-		String mensaje = "Empleado insertado";
+		String mensaje = null;
 		try {
-			negocio.insertaEmpleado(empleado);
-		} catch (Exception e) {
-			mensaje = "Error: ¿ya existe el empleado con cif " 
-					+ empleado.getCif() + "?";
-		}
+			service.insertaEmpleado(empleado);
+			mensaje = "Empleado insertado";
+		} catch (EmpleadosWebResourceDuplicatedException e) {
+			mensaje = "Error al insertar el empleado. Parece que el empleado con cif "
+					+ empleado.getCif() + " ya existe";
+		} catch (EmpleadosWebNotAuthorizedException e) {
+			mensaje = "Error al insertar el empleado. ¿Tienes permisos de inserción?";
+		}			
+		model.addAttribute("opcion", "inserta");
 		model.addAttribute("mensaje", mensaje);
 		return "empleados";
 	}
-	
-	@RequestMapping(params={"modifica"}, method=RequestMethod.POST)
+
+	@RequestMapping(method=RequestMethod.POST, params={"modifica"})
 	public String modificaEmpleado(@Valid @ModelAttribute Empleado empleado, 
 			BindingResult result, Model model) {
 		if (result.hasErrors()) {
 			return "empleados";
 		}
-		negocio.modificaEmpleado(empleado);
-		model.addAttribute("mensaje", "Empleado modificado");
+		String mensaje = null;
+		try {
+			service.modificaEmpleado(empleado);
+			mensaje = "Empleado modificado";
+		} catch (EmpleadosWebResourceNotFoundException e) {
+			mensaje = "Error al modificar el empleado. Parece que el empleado con cif "
+					+ empleado.getCif() + " no existe";
+		} catch (EmpleadosWebNotAuthorizedException e) {
+			mensaje = "Error al insertar el empleado. ¿Tienes permisos de inserción?";
+		}			
+		model.addAttribute("opcion", "modifica");
+		model.addAttribute("mensaje", mensaje);
 		return "empleados";
-	}*/
+	}
 	
 }

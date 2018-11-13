@@ -12,7 +12,7 @@ import profe.empleados.web.controllers.EmpleadosWebController;
 import profe.empleados.web.controllers.HomeController;
 import profe.empleados.web.security.EmpleadosWebSecurityConfig;
 import profe.empleados.web.service.EmpleadosWebService;
-import profe.empleados.web.service.EmpleadosWebServiceFeign;
+import profe.empleados.web.service.EmpleadosWebServiceRibbon;
 import profe.empleados.web.validator.EmpleadoValidator;
 
 @SpringBootApplication
@@ -22,11 +22,6 @@ import profe.empleados.web.validator.EmpleadoValidator;
 @Import(FeignClientsConfiguration.class)
 public class EmpleadosWebServer {
 	
-	/**
-	 * Logical name of account-service
-	 */
-	public static final String EMPLEADOS_APPLICATION = "empleados-service";
-
 	/**
 	 * Run the application using Spring Boot and an embedded servlet engine.
 	 * 
@@ -51,7 +46,7 @@ public class EmpleadosWebServer {
 
 	@Bean
 	public EmpleadosWebService webService() {
-		return new EmpleadosWebServiceFeign(EMPLEADOS_APPLICATION);
+		return new EmpleadosWebServiceRibbon();
 	}
 
 	@Bean

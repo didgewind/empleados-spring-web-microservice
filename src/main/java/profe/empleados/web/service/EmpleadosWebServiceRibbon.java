@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
@@ -14,14 +15,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import feign.Client;
-import feign.Contract;
-import feign.Feign;
-import feign.FeignException;
-import feign.auth.BasicAuthRequestInterceptor;
-import feign.codec.Decoder;
-import feign.codec.Encoder;
 import profe.empleados.web.model.Empleado;
+import profe.empleados.web.service.exceptions.EmpleadosWebException;
+import profe.empleados.web.service.exceptions.EmpleadosWebNotAuthorizedException;
+import profe.empleados.web.service.exceptions.EmpleadosWebResourceDuplicatedException;
+import profe.empleados.web.service.exceptions.EmpleadosWebResourceNotFoundException;
+import profe.empleados.web.service.exceptions.RestTemplateErrorHandler;
 
 /**
  * Hide the access to the microservice inside this local service.
@@ -38,18 +37,18 @@ public class EmpleadosWebServiceRibbon implements EmpleadosWebService {
 	@Autowired
 	private LoadBalancerClient loadBalancer;
 	
+	@Value("${app.serviceAlias}")
 	protected String serviceAlias;
 
 	protected Logger logger = Logger.getLogger(EmpleadosWebServiceRibbon.class
 			.getName());
-
-	public EmpleadosWebServiceRibbon(String serviceAlias) {
-		this.serviceAlias = serviceAlias;
-	}
 	
 	private RestTemplate getRestTemplateWithCurrentAuth() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		return restTemplateBuilder.basicAuthorization(auth.getName(), (String) auth.getCredentials()).build();
+		return restTemplateBuilder
+				.basicAuthorization(auth.getName(), (String) auth.getCredentials())
+				.errorHandler(new RestTemplateErrorHandler())
+				.build();
 	}
 
 	private String getBaseUrl() {
@@ -63,7 +62,7 @@ public class EmpleadosWebServiceRibbon implements EmpleadosWebService {
 	 * @see profe.empleados.web.service.EmpleadosWebService#getEmpleado(java.lang.String)
 	 */
 	@Override
-	public Empleado getEmpleado(String cif) {
+	public Empleado getEmpleado(String cif) throws EmpleadosWebResourceNotFoundException {
 		return getRestTemplateWithCurrentAuth().getForObject(this.getBaseUrl() + "/empleados/{cif}",
 				Empleado.class, cif);
 	}
@@ -72,15 +71,22 @@ public class EmpleadosWebServiceRibbon implements EmpleadosWebService {
 	 * @see profe.empleados.web.service.EmpleadosWebService#eliminaEmpleado(java.lang.String)
 	 */
 	@Override
-	public boolean eliminaEmpleado(String cif) {
+	public void eliminaEmpleado(String cif) 
+			throws EmpleadosWebResourceNotFoundException, EmpleadosWebNotAuthorizedException {
 		try {
 			getRestTemplateWithCurrentAuth().delete(this.getBaseUrl() + "/empleados/{cif}", cif);
 		} catch (HttpClientErrorException e) {
 			logger.info("error al eliminar el empleado");
 			e.printStackTrace();
-			return false;
+			switch (e.getStatusCode()) {
+		    
+			case NOT_FOUND: throw new EmpleadosWebResourceNotFoundException();
+			
+			case FORBIDDEN: throw new EmpleadosWebNotAuthorizedException();
+			
+			default: throw new EmpleadosWebException();
+			}
 		}
-		return true;
 	}
 	
 	/* (non-Javadoc)
@@ -102,6 +108,19 @@ public class EmpleadosWebServiceRibbon implements EmpleadosWebService {
 			return null;
 		else
 			return Arrays.asList(Empleados);
+	}
+
+	@Override
+	public void insertaEmpleado(Empleado empleado) 
+			throws EmpleadosWebNotAuthorizedException, EmpleadosWebResourceDuplicatedException {
+//		getRestTemplateWithCurrentAuth().postForObject(this.getBaseUrl() + "/empleados", empleado, Empleado.class);
+		getRestTemplateWithCurrentAuth().postForLocation(this.getBaseUrl() + "/empleados", empleado);
+	}
+
+	@Override
+	public void modificaEmpleado(Empleado empleado)
+			throws EmpleadosWebNotAuthorizedException, EmpleadosWebResourceNotFoundException {
+		getRestTemplateWithCurrentAuth().put(this.getBaseUrl() + "/empleados/" + empleado.getCif(), empleado);
 	}
 
 }

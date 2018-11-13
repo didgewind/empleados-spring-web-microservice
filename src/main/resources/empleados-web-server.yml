@@ -18,7 +18,11 @@ eureka:
     enabled: true
     serviceUrl:
       defaultZone: http://localhost:1111/eureka/
+    registerWithEureka: false
 
 # HTTP Server
 server:
   port: 3333   # HTTP (Tomcat) port
+
+app:
+  serviceAlias: empleados-service

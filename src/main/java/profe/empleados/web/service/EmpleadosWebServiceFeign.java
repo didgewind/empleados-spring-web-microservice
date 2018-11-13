@@ -22,6 +22,9 @@ import feign.auth.BasicAuthRequestInterceptor;
 import feign.codec.Decoder;
 import feign.codec.Encoder;
 import profe.empleados.web.model.Empleado;
+import profe.empleados.web.service.exceptions.EmpleadosWebNotAuthorizedException;
+import profe.empleados.web.service.exceptions.EmpleadosWebResourceDuplicatedException;
+import profe.empleados.web.service.exceptions.EmpleadosWebResourceNotFoundException;
 
 /**
  * Hide the access to the microservice inside this local service.
@@ -70,7 +73,7 @@ public class EmpleadosWebServiceFeign implements EmpleadosWebService {
 	 * @see profe.empleados.web.service.EmpleadosWebService#getEmpleado(java.lang.String)
 	 */
 	@Override
-	public Empleado getEmpleado(String cif) {
+	public Empleado getEmpleado(String cif) throws EmpleadosWebResourceNotFoundException {
 		EmpleadosFeignClient feignClient = getFeignClientWithCurrentAuth();
 		return feignClient.getEmpleado(cif);
 	}
@@ -78,17 +81,19 @@ public class EmpleadosWebServiceFeign implements EmpleadosWebService {
 	/* (non-Javadoc)
 	 * @see profe.empleados.web.service.EmpleadosWebService#eliminaEmpleado(java.lang.String)
 	 */
-	public boolean eliminaEmpleado(String cif) {
+	public void eliminaEmpleado(String cif) throws EmpleadosWebResourceNotFoundException, EmpleadosWebNotAuthorizedException {
 		try {
 			logger.info("Llamada usando feign");
 			EmpleadosFeignClient feignClient = getFeignClientWithCurrentAuth();
 			feignClient.eliminaEmpleado(cif);
 		} catch (FeignException e) {
-			logger.info("error al eliminar el empleado");
+			logger.info("error al eliminar el empleado, status: " + e.status());
 			e.printStackTrace();
-			return false;
+			switch (e.status()) {
+			
+			
+			}
 		}
-		return true;
 	}
 	
 	/* (non-Javadoc)
@@ -99,6 +104,19 @@ public class EmpleadosWebServiceFeign implements EmpleadosWebService {
 		logger.info("Llamada usando feign");
 		EmpleadosFeignClient feignClient = getFeignClientWithCurrentAuth();
 		return feignClient.getAllEmpleados();
+	}
+
+	@Override
+	public void insertaEmpleado(Empleado empleado) throws EmpleadosWebNotAuthorizedException, EmpleadosWebResourceDuplicatedException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void modificaEmpleado(Empleado empleado)
+			throws EmpleadosWebNotAuthorizedException, EmpleadosWebResourceNotFoundException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
