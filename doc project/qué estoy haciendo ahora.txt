@@ -1,17 +1,1 @@
-+ Actualizar api de empleados boot. Si put y cif url != cif body, ¿qué hacer? (ignorar)
-Probar con postman. Exportar colección. Commit (ammend)
-
-- diferencia entre postforobject y put de resttemplate
-
-+ Control de errores. En la app web method delete generamos excepción de app en función del status
-code de la excepción recibida. Usar un ResponseErrorHandler para los demás.
- 
-+ Control de errores. He creado una jerarquía de excepciones y estoy intentando sacar
-	el status code de feign exception, pero de momento no sé cómo (usar feign decoder?). Mirar
-	https://github.com/spring-cloud/spring-cloud-netflix/issues/318 y decodeStatus. Pasar de
-	feign y hacerlo con resttemplate.
-
-+ Gestionando la respuesta del delete (ok o error)
-
-+ Al no recuperar el RestTemplate con @LoadBalanced no está preguntándole a eureka dónde está
-EMPLEADOS-SERVICE, así que no lo encuentra, tenemos que investigar cómo transformarlo.
+- Configurando nuestro load balancer. Sleep en restcontroller para probar el loadbalancer weight

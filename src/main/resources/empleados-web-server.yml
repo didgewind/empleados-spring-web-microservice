@@ -24,5 +24,13 @@ eureka:
 server:
   port: 3333   # HTTP (Tomcat) port
 
+# Config de ribbon
+empleados-service:
+  ribbon:
+#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RoundRobinRule
+#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.WeightedResponseTimeRule
+    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule
+
+# Config propia
 app:
   serviceAlias: empleados-service

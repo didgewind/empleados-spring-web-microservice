@@ -1,6 +1,11 @@
-- Implementar control de errores en empleados-boot y en web
++ Implementar control de errores en empleados-boot y en web
 
-- Parámetros ribbon (política, iping, etc).
++ Parámetros ribbon (política, iping, etc).
+
+- request scope spring? proxy-scoped para resttemplate con @LoadBalanced autenticado?
+
+- Ver cómo configurar Ribbon con Eureka para que cuando un servicio se cae sea
+transparente para el usuario.
 
 - Autenticación por jwt (servicio de autenticación separado, propagación del token)
 

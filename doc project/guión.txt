@@ -20,9 +20,11 @@
 	(commit Propagamos usuario autenticado desde app web a server rest)
 - Control de errores (con try... catch y RestTemplateErrorHandler
 - Cliente web más complejo (con formulario y 5 botones)
-- Explicar Ribbon y @LoadBalanced. Lanzar varias instancias del servicio
-- Seguridad básica
-- Ribbon con autenticación
+- Explicar Ribbon y @LoadBalanced. Lanzar varias instancias del servicio.
+- Utilizar el LoadBalancerClient directamente
+- Configuración de Ribbon. Cambiar entre RoundRobin y Random rules
+- Seguridad básica. 
+- Ribbon con autenticación. Uso del LoadBalancerClient para construir el RestTemplate de forma dinámica
 - Feign (seg cableada)
 - Feign con cliente instanciado manualmente (con autenticación)
 - Transacciones

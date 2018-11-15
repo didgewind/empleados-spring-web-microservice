@@ -1,7 +1,8 @@
 Esta versión tira de spring boot 2.0
 
 * empleados web (puerto 3333): app web con seguridad (profe o admin) que tira del microservicio anterior.
-Ahora mismo están funcionando los get y el delete. Hemos modificado la forma de obtener el RestTemplate
+Ahora mismo están funcionando los get, el insert, el update y el delete. Hemos modificado la forma de obtener 
+el RestTemplate
 para poder propagar el usuario autenticado en el servidor web al servidor rest (es decir, utilizar el usuario
 que está haciendo esa llamada en ese momento). Hay que hacer notar que para ello hay que configurar el
 AuthenticationManagerBuilder (en la clase de config de seguridad) con eraseCredentials(false), para
@@ -20,7 +21,13 @@ Hemos creado una jerarquía de excepciones y transformamos los códigos de error
 aplicación en el servicio que son capturadas por el controlador para mostrar errores sensibles. Esto
 de momento funciona sólo con el servicio ribbon (no sé cómo sacar el código de estado de una excepción
 feign). En el delete del servicio Ribbon tenemos un ejemplo simple de gestión de excepciones y códigos,
-para los demás voy a hacer un ResponseErrorHandler.
+para los demás hay hecho un ResponseErrorHandler.
+
+Ribbon lo configuramos a nivel de fichero de config (aunque podría hacerse también mediante una
+clase @Configuration, ver https://cloud.spring.io/spring-cloud-netflix/multi/multi_spring-cloud-ribbon.html).
+Es importante hacer notar que la configuración se utiliza porque el prefijo de configuración (empleados-service)
+coincide con el alias del servicio al que queremos acceder. Por ello cuando usamos el LoadBalancerClient con ese
+alias se activa la configuración para ese cliente.
 
 Usamos Java Config para generar todos los beans de la app. Accediendo directamente a localhost:3333 ya aparecen
 los dos enlaces posibles. El /logout funciona con post (en index.jsp) o con get (/logout).
