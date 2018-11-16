@@ -1,0 +1,7 @@
+Este branch lo he montado para ver si funciona de alguna manera autenticación per request
+con @LoadBalanced.
+
+- El primer intento es utilizar un RestTemplate request scoped con proxyScoped. No me despliega
+porque me da una excepción de No thread-bound request found... Añadí un RequestContextListener
+al contexto según stackoverflow, seguía dando y resulta que si le quito el @LoadBalanced
+sí despliega (pero claro, ya no es loadbalanced XD).
