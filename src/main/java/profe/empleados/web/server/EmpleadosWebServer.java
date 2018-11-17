@@ -7,6 +7,7 @@ import org.springframework.cloud.openfeign.FeignClientsConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
+import org.springframework.retry.annotation.EnableRetry;
 
 import profe.empleados.web.controllers.EmpleadosWebController;
 import profe.empleados.web.controllers.HomeController;
@@ -20,6 +21,7 @@ import profe.empleados.web.validator.EmpleadoValidator;
 @EnableDiscoveryClient
 @ComponentScan(useDefaultFilters = false) // Disable component scanner
 @Import(FeignClientsConfiguration.class)
+@EnableRetry
 public class EmpleadosWebServer {
 	
 	/**

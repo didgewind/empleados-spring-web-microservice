@@ -7,7 +7,11 @@ spring:
      view:
        prefix: /jsp/
        suffix: .jsp
-
+# Ribbon retries on
+#  cloud:
+#    loadbalancer:
+#      retry: true
+      
 # Discovery Server Access
 #  1. Define URL of registration server (defaultZone)
 #  2. Reduce lease-renewal time so processes register more quickly
@@ -25,11 +29,15 @@ server:
   port: 3333   # HTTP (Tomcat) port
 
 # Config de ribbon
-empleados-service:
-  ribbon:
-#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RoundRobinRule
+#empleados-service:
+#  ribbon:
+  # Estrategia de balanceo. Si no especificamos ninguna por defecto es RoundRobinRule 
 #    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.WeightedResponseTimeRule
-    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule
+#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule
+  # Configuración de retries
+#    MaxAutoRetries: 1
+#    MaxAutoRetriesNextServer: 1
+#    OkToRetryOnAllOperations: true
 
 # Config propia
 app:

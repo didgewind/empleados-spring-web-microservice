@@ -2,7 +2,7 @@
 
 + Parámetros ribbon (política, iping, etc).
 
-- request scope spring? proxy-scoped para resttemplate con @LoadBalanced autenticado?
+- request scope spring? proxy-scoped para resttemplate con @LoadBalanced autenticado? HAY UN BRANCH NUEVO
 
 - Ver cómo configurar Ribbon con Eureka para que cuando un servicio se cae sea
 transparente para el usuario.

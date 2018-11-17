@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.client.HttpClientErrorException;
@@ -29,6 +30,7 @@ import profe.empleados.web.service.exceptions.RestTemplateErrorHandler;
  * 
  * @author Paul Chapman - Versión de Enrique Pedraza
  */
+@Retryable
 public class EmpleadosWebServiceRibbon implements EmpleadosWebService {
 
 	@Autowired
@@ -94,20 +96,20 @@ public class EmpleadosWebServiceRibbon implements EmpleadosWebService {
 	 */
 	@Override
 	public List<Empleado> getAllEmpleados() {
-		Empleado[] Empleados = null;
+		Empleado[] empleados = null;
 
 		try {
-			Empleados = getRestTemplateWithCurrentAuth().getForObject(this.getBaseUrl()
+			empleados = getRestTemplateWithCurrentAuth().getForObject(this.getBaseUrl()
 					+ "/empleados", Empleado[].class);
 		} catch (HttpClientErrorException e) {
 			logger.info("error en el getAllEmpleados");
 			e.printStackTrace();
 		}
-
-		if (Empleados == null || Empleados.length == 0)
+		logger.info("Empleados recuperados");
+		if (empleados == null || empleados.length == 0)
 			return null;
 		else
-			return Arrays.asList(Empleados);
+			return Arrays.asList(empleados);
 	}
 
 	@Override

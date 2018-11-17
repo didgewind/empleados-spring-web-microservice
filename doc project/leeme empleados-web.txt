@@ -29,6 +29,12 @@ Es importante hacer notar que la configuración se utiliza porque el prefijo de 
 coincide con el alias del servicio al que queremos acceder. Por ello cuando usamos el LoadBalancerClient con ese
 alias se activa la configuración para ese cliente.
 
+Implementamos retries usando spring-retry de forma explícita (parece que los retrys automáticos sólo funcionan
+con zuul y feign, 
+ver https://stackoverflow.com/questions/27468697/spring-cloud-with-resttemplate-ribbon-eureka-retry-when-server-not-available
+y https://stackoverflow.com/questions/33765049/spring-cloud-getting-retry-working-in-resttemplate).
+Para ello marcamos la clase @Configuration con @EnableRetry y la clase WebServiceRibbon con @Retryable
+
 Usamos Java Config para generar todos los beans de la app. Accediendo directamente a localhost:3333 ya aparecen
 los dos enlaces posibles. El /logout funciona con post (en index.jsp) o con get (/logout).
 
