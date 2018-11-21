@@ -42,3 +42,7 @@ server:
 # Config propia
 app:
   serviceAlias: empleados-service
+  dptServiceAlias: empleados-db-departamentos
+  
+  
+  

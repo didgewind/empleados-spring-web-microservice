@@ -2,6 +2,7 @@ package profe.empleados.web.service;
 
 import java.util.List;
 
+import profe.empleados.web.model.Departamento;
 import profe.empleados.web.model.Empleado;
 import profe.empleados.web.service.exceptions.EmpleadosWebNotAuthorizedException;
 import profe.empleados.web.service.exceptions.EmpleadosWebResourceDuplicatedException;
@@ -21,5 +22,7 @@ public interface EmpleadosWebService {
 
 	void modificaEmpleado(Empleado empleado) 
 			throws EmpleadosWebNotAuthorizedException, EmpleadosWebResourceNotFoundException;
+	
+	List<Departamento> getAllDepartamentos();
 
 }

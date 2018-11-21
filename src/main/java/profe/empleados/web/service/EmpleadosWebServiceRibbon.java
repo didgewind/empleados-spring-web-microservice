@@ -4,6 +4,7 @@ package profe.empleados.web.service;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import profe.empleados.web.model.Departamento;
 import profe.empleados.web.model.Empleado;
 import profe.empleados.web.service.exceptions.EmpleadosWebException;
 import profe.empleados.web.service.exceptions.EmpleadosWebNotAuthorizedException;
@@ -123,6 +125,18 @@ public class EmpleadosWebServiceRibbon implements EmpleadosWebService {
 	public void modificaEmpleado(Empleado empleado)
 			throws EmpleadosWebNotAuthorizedException, EmpleadosWebResourceNotFoundException {
 		getRestTemplateWithCurrentAuth().put(this.getBaseUrl() + "/empleados/" + empleado.getCif(), empleado);
+	}
+
+	@Override
+	public List<Departamento> getAllDepartamentos() {
+		RestTemplate rt = new RestTemplate();
+		Departamento[] departamentos = rt.getForObject("http://localhost:7777/departamentos", Departamento[].class);
+		Stream.of(departamentos).forEach(dep -> {
+			System.out.print(dep.getDesc() + ": ");
+			dep.getEmpleados().stream().forEach(System.out::print);
+			System.out.println();
+		});
+		return Arrays.asList(departamentos);
 	}
 
 }

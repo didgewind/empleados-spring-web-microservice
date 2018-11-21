@@ -21,6 +21,7 @@ import feign.FeignException;
 import feign.auth.BasicAuthRequestInterceptor;
 import feign.codec.Decoder;
 import feign.codec.Encoder;
+import profe.empleados.web.model.Departamento;
 import profe.empleados.web.model.Empleado;
 import profe.empleados.web.service.exceptions.EmpleadosWebNotAuthorizedException;
 import profe.empleados.web.service.exceptions.EmpleadosWebResourceDuplicatedException;
@@ -117,6 +118,12 @@ public class EmpleadosWebServiceFeign implements EmpleadosWebService {
 			throws EmpleadosWebNotAuthorizedException, EmpleadosWebResourceNotFoundException {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public List<Departamento> getAllDepartamentos() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

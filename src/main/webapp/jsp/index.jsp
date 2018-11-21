@@ -11,7 +11,7 @@
 </head>
 <body>
 <p>
-<a href="gestEmpleados">App de empleados</a>
+<a href="gestEmpleados">App de empleados</a> <a href="gestDepartamentos">Mostrar departamentos</a>
 </p>
 <p>Los usuarios son profe - profe y admin - admin
 <p>

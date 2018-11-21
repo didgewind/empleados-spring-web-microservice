@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.retry.annotation.EnableRetry;
 
 import profe.empleados.web.controllers.EmpleadosWebController;
+import profe.empleados.web.controllers.EmpleadosWebDepartamentosController;
 import profe.empleados.web.controllers.HomeController;
 import profe.empleados.web.security.EmpleadosWebSecurityConfig;
 import profe.empleados.web.service.EmpleadosWebService;
@@ -44,6 +45,11 @@ public class EmpleadosWebServer {
 	@Bean
 	public EmpleadosWebController webController() {
 		return new EmpleadosWebController();
+	}
+
+	@Bean
+	public EmpleadosWebDepartamentosController departamentosController() {
+		return new EmpleadosWebDepartamentosController();
 	}
 
 	@Bean
