@@ -30,7 +30,6 @@ import profe.empleados.web.service.exceptions.RestTemplateErrorHandler;
  * 
  * @author Paul Chapman - Versión de Enrique Pedraza
  */
-@Retryable
 public class EmpleadosWebServiceRibbon implements EmpleadosWebService {
 
 	@Autowired
@@ -49,7 +48,7 @@ public class EmpleadosWebServiceRibbon implements EmpleadosWebService {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		return restTemplateBuilder
 				.basicAuthorization(auth.getName(), (String) auth.getCredentials())
-				.errorHandler(new RestTemplateErrorHandler())
+//				.errorHandler(new RestTemplateErrorHandler())
 				.build();
 	}
 

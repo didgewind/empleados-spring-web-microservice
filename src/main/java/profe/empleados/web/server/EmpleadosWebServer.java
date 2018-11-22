@@ -9,6 +9,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.retry.annotation.EnableRetry;
 
+import com.netflix.loadbalancer.PingUrl;
+
 import profe.empleados.web.controllers.EmpleadosWebController;
 import profe.empleados.web.controllers.HomeController;
 import profe.empleados.web.security.EmpleadosWebSecurityConfig;
@@ -21,7 +23,6 @@ import profe.empleados.web.validator.EmpleadoValidator;
 @EnableDiscoveryClient
 @ComponentScan(useDefaultFilters = false) // Disable component scanner
 @Import(FeignClientsConfiguration.class)
-@EnableRetry
 public class EmpleadosWebServer {
 	
 	/**
