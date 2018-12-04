@@ -3,9 +3,9 @@ package profe.empleados.web.service.exceptions;
 import java.io.IOException;
 
 import org.springframework.http.client.ClientHttpResponse;
-import org.springframework.web.client.ResponseErrorHandler;
+import org.springframework.web.client.DefaultResponseErrorHandler;
 
-public class RestTemplateErrorHandler implements ResponseErrorHandler {
+public class RestTemplateErrorHandler extends DefaultResponseErrorHandler {
 
 	@Override
 	public void handleError(ClientHttpResponse httpResponse) throws IOException {
@@ -20,6 +20,9 @@ public class RestTemplateErrorHandler implements ResponseErrorHandler {
 		case CONFLICT:
 			throw new EmpleadosWebResourceDuplicatedException();
 			
+		default:
+			super.handleError(httpResponse);
+			
 		}
 	}
 
@@ -33,7 +36,7 @@ public class RestTemplateErrorHandler implements ResponseErrorHandler {
 			return true;
 			
 		default:
-			return false;
+			return super.hasError(httpResponse);
 		}
 	}
 

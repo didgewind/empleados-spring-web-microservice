@@ -30,7 +30,10 @@ import profe.empleados.web.service.exceptions.RestTemplateErrorHandler;
  * 
  * @author Paul Chapman - Versión de Enrique Pedraza
  */
-@Retryable
+/*
+ * El include es necesario pero confuso, para futuras versiones de spring retry no hará falta
+ */
+@Retryable(exclude = { EmpleadosWebException.class }, include = { Exception.class})
 public class EmpleadosWebServiceRibbon implements EmpleadosWebService {
 
 	@Autowired
@@ -75,6 +78,10 @@ public class EmpleadosWebServiceRibbon implements EmpleadosWebService {
 	@Override
 	public void eliminaEmpleado(String cif) 
 			throws EmpleadosWebResourceNotFoundException, EmpleadosWebNotAuthorizedException {
+		/*
+		 * Este try catch no es necesario porque estamos usando un errorHandler (RestTemplateErrorHandler)
+		 * asociado al RestTemplate. Lo dejamos aquí para tener un ejemplo para los cursos
+		 */
 		try {
 			getRestTemplateWithCurrentAuth().delete(this.getBaseUrl() + "/empleados/{cif}", cif);
 		} catch (HttpClientErrorException e) {
@@ -97,14 +104,8 @@ public class EmpleadosWebServiceRibbon implements EmpleadosWebService {
 	@Override
 	public List<Empleado> getAllEmpleados() {
 		Empleado[] empleados = null;
-
-		try {
-			empleados = getRestTemplateWithCurrentAuth().getForObject(this.getBaseUrl()
-					+ "/empleados", Empleado[].class);
-		} catch (HttpClientErrorException e) {
-			logger.info("error en el getAllEmpleados");
-			e.printStackTrace();
-		}
+		empleados = getRestTemplateWithCurrentAuth().getForObject(this.getBaseUrl()
+			+ "/empleados", Empleado[].class);
 		logger.info("Empleados recuperados");
 		if (empleados == null || empleados.length == 0)
 			return null;

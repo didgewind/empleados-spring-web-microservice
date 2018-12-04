@@ -7,7 +7,7 @@ para poder propagar el usuario autenticado en el servidor web al servidor rest (
 que está haciendo esa llamada en ese momento). Hay que hacer notar que para ello hay que configurar el
 AuthenticationManagerBuilder (en la clase de config de seguridad) con eraseCredentials(false), para
 que no elimine el password del Authentication nada más hacer el login, y así poder acceder a él
-en cada petición que redirigamos al servidor Rest. También hemos dejado de utilizar @LoadBalanced porque
+en cada petición que redirijamos al servidor Rest. También hemos dejado de utilizar @LoadBalanced porque
 los únicos ejemplos que encontramos siempre inyectan el RestTemplate, y para utilizar autenticación
 dinámica hay que instanciar el RestTemplate por cada petición. Quizás se podría mirar lo de los beans
 proxy-scoped...
@@ -21,19 +21,22 @@ Hemos creado una jerarquía de excepciones y transformamos los códigos de error
 aplicación en el servicio que son capturadas por el controlador para mostrar errores sensibles. Esto
 de momento funciona sólo con el servicio ribbon (no sé cómo sacar el código de estado de una excepción
 feign). En el delete del servicio Ribbon tenemos un ejemplo simple de gestión de excepciones y códigos,
-para los demás hay hecho un ResponseErrorHandler.
+para los demás hay hecho un ResponseErrorHandler. El controlador declara un controlador de errores por
+defecto (método handleError) para gestionar los errores genéricos.
+
+Implementamos retries usando spring-retry de forma explícita (parece que los retrys automáticos sólo funcionan
+con zuul y feign, ver 
+https://stackoverflow.com/questions/27468697/spring-cloud-with-resttemplate-ribbon-eureka-retry-when-server-not-available
+y https://stackoverflow.com/questions/33765049/spring-cloud-getting-retry-working-in-resttemplate).
+Para ello marcamos la clase @Configuration con @EnableRetry y la clase WebServiceRibbon con @Retryable
+excluyendo las excepciones EmpleadosWebException para que no reintente en éstas (así no 
+reintenta en FORBIDDEN o NOT_FOUND pero sí si el servicio está caído).
 
 Ribbon lo configuramos a nivel de fichero de config (aunque podría hacerse también mediante una
 clase @Configuration, ver https://cloud.spring.io/spring-cloud-netflix/multi/multi_spring-cloud-ribbon.html).
 Es importante hacer notar que la configuración se utiliza porque el prefijo de configuración (empleados-service)
 coincide con el alias del servicio al que queremos acceder. Por ello cuando usamos el LoadBalancerClient con ese
 alias se activa la configuración para ese cliente.
-
-Implementamos retries usando spring-retry de forma explícita (parece que los retrys automáticos sólo funcionan
-con zuul y feign, 
-ver https://stackoverflow.com/questions/27468697/spring-cloud-with-resttemplate-ribbon-eureka-retry-when-server-not-available
-y https://stackoverflow.com/questions/33765049/spring-cloud-getting-retry-working-in-resttemplate).
-Para ello marcamos la clase @Configuration con @EnableRetry y la clase WebServiceRibbon con @Retryable
 
 Usamos Java Config para generar todos los beans de la app. Accediendo directamente a localhost:3333 ya aparecen
 los dos enlaces posibles. El /logout funciona con post (en index.jsp) o con get (/logout).
