@@ -86,6 +86,7 @@ public class EmpleadosWebController {
 			return "empleados";
 		}
 		String mensaje = null;
+		model.addAttribute("opcion", "elimina");
 		try {
 			service.eliminaEmpleado(empleado.getCif());
 			mensaje = "Empleado eliminado";
@@ -95,7 +96,6 @@ public class EmpleadosWebController {
 		} catch (EmpleadosWebNotAuthorizedException e) {
 			mensaje = "Error al eliminar el empleado. ¿Tienes permisos de eliminación?";
 		}			
-		model.addAttribute("opcion", "elimina");
 		model.addAttribute("mensaje", mensaje);
 		return "empleados";
 	}
@@ -107,6 +107,7 @@ public class EmpleadosWebController {
 			return "empleados";
 		}
 		String mensaje = null;
+		model.addAttribute("opcion", "inserta");
 		try {
 			service.insertaEmpleado(empleado);
 			mensaje = "Empleado insertado";
@@ -116,7 +117,6 @@ public class EmpleadosWebController {
 		} catch (EmpleadosWebNotAuthorizedException e) {
 			mensaje = "Error al insertar el empleado. ¿Tienes permisos de inserción?";
 		}			
-		model.addAttribute("opcion", "inserta");
 		model.addAttribute("mensaje", mensaje);
 		return "empleados";
 	}
@@ -148,6 +148,15 @@ public class EmpleadosWebController {
 
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("mensaje", "Error al ejecutar la operación. Por favor, inténtelo de nuevo más tarde");
+		mav.addObject("empleado", new Empleado()); // Para que se pueda dibujar la página
+		mav.setViewName("empleados");
+		return mav;
+	}
+	
+	@ExceptionHandler(EmpleadosWebNotAuthorizedException.class)
+	public ModelAndView handleNotAuthorizedError(HttpServletRequest req, EmpleadosWebNotAuthorizedException ex) {
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("mensaje", "Error al ejecutar la operación. Parece que no tiene permisos para ello");
 		mav.addObject("empleado", new Empleado()); // Para que se pueda dibujar la página
 		mav.setViewName("empleados");
 		return mav;

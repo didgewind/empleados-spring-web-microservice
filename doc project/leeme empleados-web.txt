@@ -1,18 +1,20 @@
 Esta versión tira de spring boot 2.0
 
 * empleados web (puerto 3333): app web con seguridad (profe o admin) que tira del microservicio anterior.
-Ahora mismo están funcionando los get, el insert, el update y el delete. Hemos modificado la forma de obtener 
-el RestTemplate
-para poder propagar el usuario autenticado en el servidor web al servidor rest (es decir, utilizar el usuario
-que está haciendo esa llamada en ese momento). Hay que hacer notar que para ello hay que configurar el
+Ahora mismo están funcionando los get, el insert, el update y el delete.
+
+Éste es el primer commit para seguridad con tokens jwt. Está implementada sólo para la petición
+que recupera un empleado. Los usuarios, contraseñas y roles están replicados
+aquí y en auth-server. Cuando hacemos una petición al empleados-service recuperamos el token jwt de la sesión.
+Si no hay token, se pide a un AuthServiceMock que siempre devuelve el mismo. La idea para probar es que
+hagamos la petición real de autorización mediante postman y luego copiemos el string token para devolverlo
+desde esta clase. Para que todo esto funcione hay que configurar el
 AuthenticationManagerBuilder (en la clase de config de seguridad) con eraseCredentials(false), para
 que no elimine el password del Authentication nada más hacer el login, y así poder acceder a él
-en cada petición que redirijamos al servidor Rest. También hemos dejado de utilizar @LoadBalanced porque
-los únicos ejemplos que encontramos siempre inyectan el RestTemplate, y para utilizar autenticación
-dinámica hay que instanciar el RestTemplate por cada petición. Quizás se podría mirar lo de los beans
-proxy-scoped...
+en cada petición que redirijamos al servidor Rest.
 
-También estamos usando Feign (peticiones rest declarativas). Creamos el cliente Feign manualmente
+También tenemos la opción de usar Feign (peticiones rest declarativas), aunque no funciona con los últimos
+cambios. Creamos el cliente Feign manualmente
 por cada petición, para poder propagar las credenciales.
 
 El servicio web está refactorizado para separar el código Feign del que utiliza directamente Ribbon.
@@ -44,10 +46,7 @@ los dos enlaces posibles. El /logout funciona con post (en index.jsp) o con get 
 	- EmpleadosWebService: clase de negocio que interactúa con el microservicio. 
 	  Como ahora no usamos @LoadBalanced, inyectamos en su lugar un LoadBalancerClient
 	  para consultar al servidor Eureka con balance de carga y obtener la Url del servicio
-	  de empleados a partir de su alias (visto en https://www.javainuse.com/spring/spring_ribbon). 
-	  Para conseguir seguridad dinámica inyectamos el RestTemplateBuilder 
-	  y para cada petición recuperamos el principal y la password y con ellos generamos 
-	  un RestTemplate autenticado.
+	  de empleados a partir de su alias (visto en https://www.javainuse.com/spring/spring_ribbon).
 	  
 	  Implementa un método nuevo (getAllEmpleadosWithFeign()) que utiliza Feign para recuperar
 	  todos los empleados
@@ -63,6 +62,12 @@ los dos enlaces posibles. El /logout funciona con post (en index.jsp) o con get 
 	  
 	- EmpleadoValidator: validador spring de cif, nombre y apps obligatorios y de edad positiva. Utiliza
 	  el fichero de recursos para los parámetros de los mensajes (Name ó Nombre, por ejemplo).
+	  
+	- EmpleadosAuthManager/Impl: gestiona la obtención y almacenamiento del token jwt. Tira de un
+	  EmpleadosAuthService.
+	  
+	- EmpleadosAuthService: interacción con el microservicio de autenticación. Lo implementamos
+	  mediante un mock (que devuelve un token explícito).
 
 - Sobre el logout (cogido del proyecto 'empleados hb spring mvc sec ws 4' del workspace
 'spring completo'): parece que desde la versión 4 de spring security 
