@@ -26,18 +26,4 @@ public class RestTemplateErrorHandler extends DefaultResponseErrorHandler {
 		}
 	}
 
-	@Override
-	public boolean hasError(ClientHttpResponse httpResponse) throws IOException {
-		switch (httpResponse.getStatusCode()) {
-		
-		case NOT_FOUND:
-		case FORBIDDEN:
-		case CONFLICT:
-			return true;
-			
-		default:
-			return super.hasError(httpResponse);
-		}
-	}
-
 }

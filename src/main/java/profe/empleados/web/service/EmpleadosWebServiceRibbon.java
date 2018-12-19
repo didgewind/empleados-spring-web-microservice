@@ -17,7 +17,7 @@ import org.springframework.retry.annotation.Retryable;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import profe.empleados.web.model.Empleado;
+import profe.empleados.model.Empleado;
 import profe.empleados.web.security.EmpleadosAuthManager;
 import profe.empleados.web.service.exceptions.EmpleadosWebException;
 import profe.empleados.web.service.exceptions.EmpleadosWebNotAuthorizedException;

@@ -9,7 +9,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import profe.empleados.web.model.Empleado;
+import profe.empleados.model.Empleado;
 
 
 /**

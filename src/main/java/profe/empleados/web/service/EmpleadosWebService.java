@@ -2,7 +2,7 @@ package profe.empleados.web.service;
 
 import java.util.List;
 
-import profe.empleados.web.model.Empleado;
+import profe.empleados.model.Empleado;
 import profe.empleados.web.service.exceptions.EmpleadosWebNotAuthorizedException;
 import profe.empleados.web.service.exceptions.EmpleadosWebResourceDuplicatedException;
 import profe.empleados.web.service.exceptions.EmpleadosWebResourceNotFoundException;

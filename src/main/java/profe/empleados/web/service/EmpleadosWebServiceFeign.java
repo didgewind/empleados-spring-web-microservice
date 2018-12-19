@@ -21,7 +21,7 @@ import feign.FeignException;
 import feign.auth.BasicAuthRequestInterceptor;
 import feign.codec.Decoder;
 import feign.codec.Encoder;
-import profe.empleados.web.model.Empleado;
+import profe.empleados.model.Empleado;
 import profe.empleados.web.service.exceptions.EmpleadosWebNotAuthorizedException;
 import profe.empleados.web.service.exceptions.EmpleadosWebResourceDuplicatedException;
 import profe.empleados.web.service.exceptions.EmpleadosWebResourceNotFoundException;

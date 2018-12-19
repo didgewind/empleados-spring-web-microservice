@@ -42,3 +42,4 @@ server:
 # Config propia
 app:
   serviceAlias: empleados-service
+  authServiceAlias: auth-service

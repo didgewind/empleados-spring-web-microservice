@@ -3,11 +3,13 @@ package profe.empleados.web.server;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.openfeign.FeignClientsConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.retry.annotation.EnableRetry;
+import org.springframework.web.client.RestTemplate;
 
 import profe.empleados.web.controllers.EmpleadosWebController;
 import profe.empleados.web.controllers.HomeController;
@@ -15,7 +17,7 @@ import profe.empleados.web.security.EmpleadosAuthManager;
 import profe.empleados.web.security.EmpleadosAuthManagerImpl;
 import profe.empleados.web.security.EmpleadosWebSecurityConfig;
 import profe.empleados.web.service.EmpleadosAuthService;
-import profe.empleados.web.service.EmpleadosAuthServiceMock;
+import profe.empleados.web.service.EmpleadosAuthServiceImpl;
 import profe.empleados.web.service.EmpleadosWebService;
 import profe.empleados.web.service.EmpleadosWebServiceRibbon;
 import profe.empleados.web.validator.EmpleadoValidator;
@@ -67,7 +69,7 @@ public class EmpleadosWebServer {
 
 	@Bean
 	public EmpleadosAuthService empleadosAuthService() {
-		return new EmpleadosAuthServiceMock();
+		return new EmpleadosAuthServiceImpl();
 	}
 
 	@Bean
@@ -75,4 +77,9 @@ public class EmpleadosWebServer {
 		return new EmpleadosAuthManagerImpl();
 	}
 
+	@LoadBalanced
+	@Bean
+	public RestTemplate loadBalancedRestTemplate() {
+		return new RestTemplate();
+	}
 }

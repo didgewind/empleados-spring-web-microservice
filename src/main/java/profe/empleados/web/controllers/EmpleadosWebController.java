@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import profe.empleados.web.model.Empleado;
+import profe.empleados.model.Empleado;
 import profe.empleados.web.service.EmpleadosWebService;
 import profe.empleados.web.service.exceptions.EmpleadosWebNotAuthorizedException;
 import profe.empleados.web.service.exceptions.EmpleadosWebResourceDuplicatedException;

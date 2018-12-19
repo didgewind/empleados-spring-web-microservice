@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import profe.empleados.web.model.Empleado;
+import profe.empleados.model.Empleado;
 
 //@FeignClient(name="empleados-service", configuration = EmpleadosFeignAuthConfiguration.class)
 public interface EmpleadosFeignClient {
