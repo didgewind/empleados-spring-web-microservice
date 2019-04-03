@@ -11,12 +11,12 @@
 </head>
 <body>
 <p>
-<a href="gestEmpleados">App de empleados</a>
+<a id="link_gestor" href="gestEmpleados">App de empleados</a>
 </p>
 <p>Los usuarios son profe - profe y admin - admin
 <p>
 <form:form action="logout">
-<input type="submit" value="Logout" />
+<input type="submit" id="btn_logout" value="Logout" />
 </form:form>
 </p>
 </body>

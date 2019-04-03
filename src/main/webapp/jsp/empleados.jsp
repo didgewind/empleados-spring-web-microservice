@@ -19,10 +19,10 @@
 <form:errors path="edad" />
 </c:if>
 </p>
-<p><spring:message code="cif"/>: <form:input type="text" path="cif" /></p>
-<p><spring:message code="nombre"/>: <form:input type="text" path="nombre" /></p>
-<p><spring:message code="apellidos"/>: <form:input type="text" path="apellidos" /></p>
-<p><spring:message code="edad"/>: <form:input type="text" path="edad" /></p>
+<p><spring:message code="cif"/>: <form:input type="text" path="cif" id="input_cif"/></p>
+<p><spring:message code="nombre"/>: <form:input type="text" path="nombre" id="input_nombre"/></p>
+<p><spring:message code="apellidos"/>: <form:input type="text" path="apellidos" id="input_apps"/></p>
+<p><spring:message code="edad"/>: <form:input type="text" path="edad" id="input_edad"/></p>
 <p>
 	<input type="submit" name="muestraUno" value="Muestra Uno" />
 	<input type="submit" name="muestraTodos" value="Muestra Todos" />

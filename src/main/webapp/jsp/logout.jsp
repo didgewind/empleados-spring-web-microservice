@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
+<!-- ESTA PAGE PARECE QUE AHORA MISMO NO SE USA -->
 <!DOCTYPE html>
 <html>
 <head>

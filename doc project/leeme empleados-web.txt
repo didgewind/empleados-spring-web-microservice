@@ -1,3 +1,7 @@
+IMPORTANTE: EN LOS CURSOS, SI EL FORMULARIO DE EMPLEADOS NO VA CON ETIQUETAS DE SPRING (<form:form>)
+LA CONFIG DE SEGURIDAD TIENE QUE LLEVAR csrf().disable(), PORQUE SI NO ME VA A DAR UN FORBIDDEN
+CADA VEZ QUE PULSE UN BOTÓN
+
 Esta versión tira de spring boot 2.0
 
 * empleados web (puerto 3333): app web con seguridad (profe o admin) que tira del microservicio anterior.
