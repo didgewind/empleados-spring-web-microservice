@@ -7,22 +7,6 @@ spring:
      view:
        prefix: /jsp/
        suffix: .jsp
-# Ribbon retries on
-#  cloud:
-#    loadbalancer:
-#      retry: true
-      
-# Discovery Server Access
-#  1. Define URL of registration server (defaultZone)
-#  2. Reduce lease-renewal time so processes register more quickly
-eureka:
-  instance:
-     leaseRenewalIntervalInSeconds: 5   # DO NOT DO THIS IN PRODUCTION
-  client:
-    enabled: true
-    serviceUrl:
-      defaultZone: http://localhost:1111/eureka/
-    registerWithEureka: false
 
 # HTTP Server
 server:
@@ -42,3 +26,4 @@ server:
 # Config propia
 app:
   serviceAlias: empleados-service
+  serviceUrl: http://localhost:5555/

@@ -13,12 +13,11 @@ import profe.empleados.web.controllers.EmpleadosWebController;
 import profe.empleados.web.controllers.HomeController;
 import profe.empleados.web.security.EmpleadosWebSecurityConfig;
 import profe.empleados.web.service.EmpleadosWebService;
-import profe.empleados.web.service.EmpleadosWebServiceRibbon;
+import profe.empleados.web.service.EmpleadosWebServiceStatic;
 import profe.empleados.web.validator.EmpleadoValidator;
 
 @SpringBootApplication
 //@EnableFeignClients(basePackages = "profe.empleados.web.service")
-@EnableDiscoveryClient
 @ComponentScan(useDefaultFilters = false) // Disable component scanner
 @Import(FeignClientsConfiguration.class)
 @EnableRetry
@@ -48,7 +47,7 @@ public class EmpleadosWebServer {
 
 	@Bean
 	public EmpleadosWebService webService() {
-		return new EmpleadosWebServiceRibbon();
+		return new EmpleadosWebServiceStatic();
 	}
 
 	@Bean
