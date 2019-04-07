@@ -3,16 +3,21 @@ package profe.empleados.web.server;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.openfeign.FeignClientsConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
+import org.springframework.web.client.RestTemplate;
 
 import profe.empleados.web.controllers.EmpleadosWebController;
 import profe.empleados.web.controllers.HomeController;
 import profe.empleados.web.security.EmpleadosWebSecurityConfig;
 import profe.empleados.web.service.EmpleadosWebService;
-import profe.empleados.web.service.EmpleadosWebServiceFeign;
+import profe.empleados.web.service.EmpleadosWebServiceDynamic;
+import profe.empleados.web.service.EmpleadosWebServiceRibbonDeclarado;
+import profe.empleados.web.service.EmpleadosWebServiceRibbonProgramado;
+import profe.empleados.web.service.EmpleadosWebServiceStatic;
 import profe.empleados.web.validator.EmpleadoValidator;
 
 @SpringBootApplication
@@ -51,7 +56,8 @@ public class EmpleadosWebServer {
 
 	@Bean
 	public EmpleadosWebService webService() {
-		return new EmpleadosWebServiceFeign(EMPLEADOS_APPLICATION);
+		return new EmpleadosWebServiceDynamic();
+//		return new EmpleadosWebServiceFeign(EMPLEADOS_APPLICATION);
 	}
 
 	@Bean
@@ -64,4 +70,14 @@ public class EmpleadosWebServer {
 		return new EmpleadosWebSecurityConfig();
 	}
 
+	@Bean
+	public RestTemplate restTemplate() {
+		return new RestTemplate();
+	}
+
+	@Bean
+	@LoadBalanced
+	public RestTemplate restTemplateLB() {
+		return new RestTemplate();
+	}
 }

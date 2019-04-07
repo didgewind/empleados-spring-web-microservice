@@ -1,0 +1,22 @@
++ Documentar auth jwt con auth-server y spring-boot
+
+* tirar de auth desde servidor web
+
++ Método en el AuthManager que devuelva ya la cabecera con el token jwt
+
+Cuando se hace un login deberíamos enviar la info al auth-server y actuar en consecuencia.
+
++ Vamos a hacer lo siguiente para ir probando: Primero vamos a replicar info de autenticación
+en el web server, y para cada petición accedemos a la sesión, vemos si tenemos la cookie
+de autenticación, si la tenemos la usamos y si no la pedimos al servidor de autenticación y
+la metemos en la sesión.
+
++ Después, añadimos código a este proceso que transforme el token en un authorization y
+probamos una petición.
+
++ Una vez conseguido esto, normalizamos el resto de peticiones: falta el put (copiar el post)
+
+ y a continuación usamos un 
+loginsuccesshandler que le pida el token al auth-server tras login exitoso.
+
+Y luego usamos el spring cloud config

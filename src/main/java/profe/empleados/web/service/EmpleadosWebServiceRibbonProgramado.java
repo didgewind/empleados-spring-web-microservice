@@ -24,13 +24,12 @@ import feign.codec.Encoder;
 import profe.empleados.web.model.Empleado;
 
 /**
- * Hide the access to the microservice inside this local service.
- * 
- * Implementación que usa Ribbon
+ * Implementación que usa Ribbon con LoadBalancerClient. Integrado
+ * control de errores y seguridad
  * 
  * @author Paul Chapman - Versión de Enrique Pedraza
  */
-public class EmpleadosWebServiceRibbon implements EmpleadosWebService {
+public class EmpleadosWebServiceRibbonProgramado implements EmpleadosWebService {
 
 	@Autowired
 	protected RestTemplateBuilder restTemplateBuilder;
@@ -40,10 +39,10 @@ public class EmpleadosWebServiceRibbon implements EmpleadosWebService {
 	
 	protected String serviceAlias;
 
-	protected Logger logger = Logger.getLogger(EmpleadosWebServiceRibbon.class
+	protected Logger logger = Logger.getLogger(EmpleadosWebServiceRibbonProgramado.class
 			.getName());
 
-	public EmpleadosWebServiceRibbon(String serviceAlias) {
+	public EmpleadosWebServiceRibbonProgramado(String serviceAlias) {
 		this.serviceAlias = serviceAlias;
 	}
 	

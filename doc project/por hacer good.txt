@@ -1,0 +1,26 @@
+- Autenticación por jwt (servicio de autenticación separado, propagación del token). FALTA
+EL CLIENTE (EMPLEADOS WEB)
+
+- spring cloud config
+
+- token temporal, token de resolicitud (mirar bien qué es todo esto)
+
+- Simulación transacción distribuida (microservicio de departamentos y añadir/eliminar empleados). Utilizar
+CompletableFuture (ver ej en java 8 new features book)?
+
+- mirar webclient (en contraposición a resttemplate)
+
+- Mirar curl
+
++ Mirar bien retryable (que no salte en excepciones de app, etc)
+
++ Probar ribbon retry con un ping propio
+
++ Implementar control de errores en empleados-boot y en web
+
++ Parámetros ribbon (política, iping, etc).
+
+- request scope spring? proxy-scoped para resttemplate con @LoadBalanced autenticado? HAY UN BRANCH NUEVO
+
++ Ver cómo configurar Ribbon con Eureka para que cuando un servicio se cae sea
+transparente para el usuario. UTILIZAMOS SPRING-RETRY
