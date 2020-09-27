@@ -12,19 +12,33 @@ de la capa de servicios (static, dynamic, ribbondeclarado, ribbonprogramado, fei
 * url_servicio_cableada: para utilizarlo en pruebas de testing con su homólogo empleados spring boot,
 no usa eureka ni ribbon
 
-* empleados web (puerto 3333): app web con seguridad (profe o admin) que tira del microservicio anterior.
+* departamentos: utiliza el servicio de departamentos, los muestra en una jsp aparte
+
+---
+
+empleados web (puerto 3333): app web con seguridad (profe o admin) que tira del microservicio de empleados.
 Ahora mismo están funcionando los get, el insert, el update y el delete.
 
-Utiliza tokens jwt para acceder al servicio de empleados. Los usuarios, contraseñas y roles están replicados
-aquí y en auth-server. Cuando hacemos una petición al empleados-service recuperamos el token jwt de la sesión.
-Si no hay token, se pide al AuthServiceImpl enviando el usuario y password con el que hayamos logeado,
-y se utiliza el token que devuelve este servicio. También podemos prescindir de acceder a este
-servicio y utilizar un AuthServiceMock que siempre devuelve el mismo token. La idea para probar es que
-hagamos la petición real de autorización mediante postman y luego copiemos el string token para devolverlo
-desde esta clase. Para que todo esto funcione hay que configurar el
-AuthenticationManagerBuilder (en la clase de config de seguridad) con eraseCredentials(false), para
-que no elimine el password del Authentication nada más hacer el login, y así poder acceder a él
-en cada petición que redirijamos al servidor Rest.
+Utiliza tokens jwt para acceder al servicio de empleados. Los usuarios, contraseñas y roles están definidos
+en el auth-server. Durante el login se envían las credenciales al auth server, que responderá con un error 401
+o con un token jwt. Si es lo segundo añadimos este token a la sesión (para autenticarnos con los
+distintos microservicios) y lo parseamos para añadir nuestros roles al contexto de seguridad
+(para que spring nos permita acceder a las partes protegidas de nuestra web). Si el auth server
+responde con un error,spring ya se encarga de redirigirnos de nuevo al login. Todo esto funciona así:
+
+- En EmpleadosWebSecurityConfig declaramos qué roles pueden acceder a qué partes de nuestra web. No declaramos
+users, passwords ni roles (están declarados en el AuthServer). 
+Sí especificamos un AuthenticationProvider, EmpleadosWebAuthenticationProvider
+
+- EmpleadosWebAuthenticationProvider: salta cada vez que intentamos hacer login. Se conecta con el AuthServer 
+pasándole el user y password que proporciona el usuario. Éste responderá con un web token con los roles embebidos
+o con un 401. Si es lo primero, almacenamos el web token en la sesión y los roles en nuestro contexto de seguridad.
+Si es lo segundo, lanzamos un BadCredentialsException que hará que Spring vuelva a mostrar la pantalla de login
+
+- EmpleadosAuthServiceImpl: realiza la petición al AuthServer
+
+- EmpleadosAuthManagerImpl: genera la cabecera http con el token de la sesión para realizar peticiones a
+los diferentes microservicios
 
 También tenemos la opción de usar Feign (peticiones rest declarativas), aunque no funciona con los últimos
 cambios. Creamos el cliente Feign manualmente
@@ -76,11 +90,14 @@ los dos enlaces posibles. El /logout funciona con post (en index.jsp) o con get 
 	- EmpleadoValidator: validador spring de cif, nombre y apps obligatorios y de edad positiva. Utiliza
 	  el fichero de recursos para los parámetros de los mensajes (Name ó Nombre, por ejemplo).
 	  
-	- EmpleadosAuthManager/Impl: gestiona la obtención y almacenamiento del token jwt. Tira de un
-	  EmpleadosAuthService.
+	- EmpleadosAuthManager/Impl: genera la cabecera http con el token de la sesión para realizar peticiones a
+	  los diferentes microservicios.
 	  
-	- EmpleadosAuthService: interacción con el microservicio de autenticación. Lo implementamos
-	  mediante un mock (que devuelve un token explícito).
+	- EmpleadosAuthService: interacción con el microservicio de autenticación. Existen la impl
+	  real (que utiliza un RT @LoadBalanced para acceder al servicio de autenticación) y una
+	  implementación mock (que devuelve un token explícito).
+	  
+	- EmpleadosWebAuthenticationProvider: ver más arriba.
 
 - Sobre el logout (cogido del proyecto 'empleados hb spring mvc sec ws 4' del workspace
 'spring completo'): parece que desde la versión 4 de spring security 

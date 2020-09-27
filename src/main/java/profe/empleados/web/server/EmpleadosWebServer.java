@@ -9,12 +9,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.retry.annotation.EnableRetry;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.web.client.RestTemplate;
 
 import profe.empleados.web.controllers.EmpleadosWebController;
 import profe.empleados.web.controllers.HomeController;
 import profe.empleados.web.security.EmpleadosAuthManager;
 import profe.empleados.web.security.EmpleadosAuthManagerImpl;
+import profe.empleados.web.security.EmpleadosWebAuthenticationProvider;
 import profe.empleados.web.security.EmpleadosWebSecurityConfig;
 import profe.empleados.web.service.EmpleadosAuthService;
 import profe.empleados.web.service.EmpleadosAuthServiceImpl;
@@ -81,5 +83,10 @@ public class EmpleadosWebServer {
 	@Bean
 	public RestTemplate loadBalancedRestTemplate() {
 		return new RestTemplate();
+	}
+	
+	@Bean
+	public AuthenticationProvider authenticationProvider() {
+		return new EmpleadosWebAuthenticationProvider();
 	}
 }

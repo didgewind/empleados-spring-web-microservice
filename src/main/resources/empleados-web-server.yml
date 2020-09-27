@@ -41,5 +41,6 @@ server:
 
 # Config propia
 app:
+  jwtSecretKey: P@tit0
   serviceAlias: empleados-service
   authServiceAlias: auth-service

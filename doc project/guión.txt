@@ -17,27 +17,21 @@
 	
 - Crear cliente web con RestTemplate (new RestTemplate)
 
-*** Aquí en realidad tenemos dos opciones, o esta primera o un único microservicio que tira de bds diferentes para 
+- Microservicio de empleados tirando de bd local o la bd en mi equipo con bds diferentes para 
 cada alumno (el script de generación de bds para 15 alumnos está en la carpeta bd) del proyecto empleados spring-boot
-commit Corregido token mal formado y db múltiples) ***
+commit Corregido token mal formado y db múltiples)
 
-- Ejemplo de microservicio más complejo. Simulación de bd
-	(microservicio bd-empleados-service, una única clase anotada con
-	@RestController y @SpringBootApplication)
-- Otro microservicio que tira de esta bd (empleados-rest-service)
-
-**************
-
+- Cliente web de empleados
 - Eureka Server. Registrar servicios y buscar con DiscoveryService
 	(branch services_varios)
+- Ejercicio: Crear microservicio de departamentos (ver proyecto). Añadir a la app web
+un DepartamentosController que recupere todos los departamentos y los muestre en una
+jsp con sus empleados (branch departamentos)
 - Control de errores (con try... catch y RestTemplateErrorHandler. Uso del RestTemplateBuilder para construir el RestTemplate de forma dinámica)
 - Cliente web más complejo (con formulario y 5 botones)
 - Explicar Ribbon y @LoadBalanced. Lanzar varias instancias del servicio (cuidado porque aquí el serviceAlias tiene que
 llevar http:// delante)
 - Configuración de Ribbon. Cambiar entre RoundRobin y Random rules
-- Ejercicio: Crear microservicio de departamentos (ver proyecto). Añadir a la app web
-un DepartamentosController que recupere todos los departamentos y los muestre en una
-jsp con sus empleados (branch departamentos)
 - Utilizar el LoadBalancerClient directamente
 - Reintentos con spring retry
 - Seguridad básica. 

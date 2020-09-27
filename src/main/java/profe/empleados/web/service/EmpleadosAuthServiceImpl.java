@@ -8,6 +8,7 @@ import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import profe.empleados.model.LoginUser;
@@ -32,12 +33,12 @@ public class EmpleadosAuthServiceImpl implements EmpleadosAuthService {
 	
 
 	@Override
-	public String getAuthenticationToken(String user, String password) {
+	public String getAuthenticationToken(String user, String password) throws HttpClientErrorException {
 		HttpEntity<LoginUser> httpEntity = new HttpEntity<LoginUser>(
 				new LoginUser(user, password));
-		HttpEntity<String> response = restTemplate.exchange("http://" + serviceAlias + "/auth",
-				HttpMethod.POST, httpEntity,
-				String.class);
+			HttpEntity<String> response = restTemplate.exchange("http://" + serviceAlias + "/auth",
+					HttpMethod.POST, httpEntity,
+					String.class);
 		HttpHeaders headers = response.getHeaders();
 		return headers.getFirst("Authorization");
 	}

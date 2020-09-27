@@ -12,8 +12,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import profe.empleados.web.service.EmpleadosAuthService;
 
 /**
- * Clase que gestiona la recuperación y almacenamiento del token de autorización
- * en la sesión
+ * Clase que gestiona la generación de las cabeceras http de petición
+ * a los diferentes microservicios incluyendo en ellas el token de autorización
  * 
  * @author made
  *
@@ -27,17 +27,7 @@ public class EmpleadosAuthManagerImpl implements EmpleadosAuthManager {
 	
 	private String getAuthToken() {
 		HttpSession session = getSession();
-		String token = (String) session.getAttribute(JWT_TOKEN_SESSION_ATT);
-		// Si no existe el token jwt en la sesión
-		if (token == null) {
-			// Pedírselo al servidor de autenticación
-			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-			token = authService.getAuthenticationToken(auth.getName(), (String) auth.getCredentials());
-			// Almacenarlo en la sesión
-			session.setAttribute(JWT_TOKEN_SESSION_ATT, token);
-		}
-		// Devolver el token
-		return token;
+		return (String) session.getAttribute(JWT_TOKEN_SESSION_ATT);
 	}
 
 	private HttpSession getSession() {
