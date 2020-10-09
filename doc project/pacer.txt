@@ -1,0 +1,23 @@
+- Investigar seguridad con credenciales. Vamos a añadir autenticación con certificado en el
+microservicio de departamentos, y para probarlo hemos importado el certificado correspondiente
+en chromium y firefox, para realizar la petición desde el navegador. Después podemos
+modificar la llamada al microservicio desde nuestra app web para incluir el certificado.
+
++ Ahora mismo el servicio ribbon añade las cabeceras de seguridad a las peticiones (con el token
+jwt) para cada petición haciendo uso del EmpleadosAuthManagerImpl. Éste comprueba si el token
+está en la sesión, y si no hace la petición al microservicio de autenticación. Para ello le envía
+el user y el password autenticados, pero para que esto funcione tenemos configurado el
+AuthenticationManagerBuilder (en la clase de config de seguridad) con eraseCredentials(false), para
+que no elimine el password del Authentication nada más hacer el login. Cambiar esto para
+que la petición del token se haga nada más realizar el login.
+
+Vamos a hacer que toda la autenticación (incluso la de la app web) se haga desde el servicio
+de autenticación. Para ello haremos como en el servicio de empleados, es decir, en la config
+de seguridad únicamente definiremos qué roles tienen acceso a qué partes de la app.
+Durante el logeo se envía la info al auth server, que responderá con un error
+o con un token jtw. Si es lo segundo añadimos este token a la sesión (para autenticarnos con los
+distintos microservicios) y lo parseamos para añadir nuestros roles al contexto de seguridad
+(para que spring nos permita acceder a las partes protegidas de nuestra web). Si el auth server
+responde con un error no hacemos nada, y spring ya se encarga de redirigirnos al login si estamos
+intentandos acceder a alguna parte protegida.
+

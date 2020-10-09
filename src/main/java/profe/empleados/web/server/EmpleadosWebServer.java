@@ -66,5 +66,5 @@ public class EmpleadosWebServer {
 	public EmpleadosWebSecurityConfig empleadosSecurityConfig() {
 		return new EmpleadosWebSecurityConfig();
 	}
-
+	
 }

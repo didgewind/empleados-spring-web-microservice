@@ -1,19 +1,33 @@
 package profe.empleados.web.service;
 
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 
+import javax.net.ssl.SSLContext;
+
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.ssl.SSLContextBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
@@ -55,6 +69,30 @@ public class EmpleadosWebServiceRibbon implements EmpleadosWebService {
 				.build();
 	}
 
+    public RestTemplate getRestTemplateWithCredentials() throws RuntimeException {
+
+        SSLContext sslContext;
+		try {
+			sslContext = SSLContextBuilder
+			        .create()
+			        .loadKeyMaterial(ResourceUtils.getFile("classpath:clientBobKeystore.jks"), "ausencia".toCharArray(), "ausencia".toCharArray())
+			        .loadTrustMaterial(ResourceUtils.getFile("classpath:clientBobTruststore.p12"), "ausencia".toCharArray())
+			        .build();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+
+        HttpClient client = HttpClients.custom()
+                .setSSLContext(sslContext)
+                .build();
+
+        return restTemplateBuilder
+                .requestFactory(() -> new HttpComponentsClientHttpRequestFactory(client))
+                .build();
+    }
+    
 	private String getBaseUrl() {
 		ServiceInstance serviceInstance = loadBalancer.choose(this.serviceAlias);
 		logger.info("Estamos accediendo al servicio en " + serviceInstance.getUri());
@@ -129,7 +167,7 @@ public class EmpleadosWebServiceRibbon implements EmpleadosWebService {
 
 	@Override
 	public List<Departamento> getAllDepartamentos() {
-		RestTemplate rt = new RestTemplate();
+		RestTemplate rt = getRestTemplateWithCredentials();
 		Departamento[] departamentos = rt.getForObject("http://localhost:7777/departamentos", Departamento[].class);
 		Stream.of(departamentos).forEach(dep -> {
 			System.out.print(dep.getDesc() + ": ");
