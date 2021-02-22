@@ -37,7 +37,7 @@ empleados-service:
 #    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule
 #    NFLoadBalancerPingClassName: com.netflix.loadbalancer.PingUrl
   # Configuración de retries
-    MaxAutoRetries: 1
+    MaxAutoRetries: 3
     MaxAutoRetriesNextServer: 1
     OkToRetryOnAllOperations: true
     retryableStatusCodes: 500, 502

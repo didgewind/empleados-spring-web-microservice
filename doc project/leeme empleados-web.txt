@@ -1,21 +1,13 @@
 Esta versión tira de spring boot 2.0
 
-* empleados web (puerto 3333): app web con seguridad (profe o admin) que tira del microservicio anterior.
-Ahora mismo están funcionando los get, el insert, el update y el delete. Hemos modificado la forma de obtener 
-el RestTemplate
-para poder propagar el usuario autenticado en el servidor web al servidor rest (es decir, utilizar el usuario
-que está haciendo esa llamada en ese momento). Hay que hacer notar que para ello hay que configurar el
-AuthenticationManagerBuilder (en la clase de config de seguridad) con eraseCredentials(false), para
-que no elimine el password del Authentication nada más hacer el login, y así poder acceder a él
-en cada petición que redirigamos al servidor Rest. También hemos dejado de utilizar @LoadBalanced porque
-los únicos ejemplos que encontramos siempre inyectan el RestTemplate, y para utilizar autenticación
-dinámica hay que instanciar el RestTemplate por cada petición. Quizás se podría mirar lo de los beans
-proxy-scoped...
+Este commit está configurado y funcionando para que los retrys sean implícitos. Necesitamos el server
+eureka levantado y varios empleados-service (por ejemplo con los commit cambiamos post por put)
 
-También estamos usando Feign (peticiones rest declarativas). Creamos el cliente Feign manualmente
-por cada petición, para poder propagar las credenciales.
+Los retrys están configurados en el fichero de configuración, hemos añadido el jar de spring-retry al pom
+ y utilizado un RestTemplate LoadBalanced (funciona además out-of-the-box con zuul y feign, pero no con un 
+ LoadBalancerClient). Como usamos el RT LB cableamos la autenticación al crearlo a admin - admin.
 
-El servicio web está refactorizado para separar el código Feign del que utiliza directamente Ribbon.
+Funcionan los get, el insert, el update y el delete.
 
 Hemos creado una jerarquía de excepciones y transformamos los códigos de error en excepciones de
 aplicación en el servicio que son capturadas por el controlador para mostrar errores sensibles. Esto
@@ -28,12 +20,6 @@ clase @Configuration, ver https://cloud.spring.io/spring-cloud-netflix/multi/mul
 Es importante hacer notar que la configuración se utiliza porque el prefijo de configuración (empleados-service)
 coincide con el alias del servicio al que queremos acceder. Por ello cuando usamos el LoadBalancerClient con ese
 alias se activa la configuración para ese cliente.
-
-Implementamos retries usando spring-retry de forma explícita (parece que los retrys automáticos sólo funcionan
-con zuul y feign, 
-ver https://stackoverflow.com/questions/27468697/spring-cloud-with-resttemplate-ribbon-eureka-retry-when-server-not-available
-y https://stackoverflow.com/questions/33765049/spring-cloud-getting-retry-working-in-resttemplate).
-Para ello marcamos la clase @Configuration con @EnableRetry y la clase WebServiceRibbon con @Retryable
 
 Usamos Java Config para generar todos los beans de la app. Accediendo directamente a localhost:3333 ya aparecen
 los dos enlaces posibles. El /logout funciona con post (en index.jsp) o con get (/logout).
@@ -60,6 +46,8 @@ los dos enlaces posibles. El /logout funciona con post (en index.jsp) o con get 
 	  
 	- EmpleadoValidator: validador spring de cif, nombre y apps obligatorios y de edad positiva. Utiliza
 	  el fichero de recursos para los parámetros de los mensajes (Name ó Nombre, por ejemplo).
+	  
+	- EmpleadosWebServiceRibbonDeclarado: Service que usa RestTemplate LoadBalanced y retries implícitos.
 
 - Sobre el logout (cogido del proyecto 'empleados hb spring mvc sec ws 4' del workspace
 'spring completo'): parece que desde la versión 4 de spring security 
