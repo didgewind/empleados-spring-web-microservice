@@ -25,7 +25,8 @@ import profe.empleados.web.service.exceptions.RestTemplateErrorHandler;
 /**
  * Hide the access to the microservice inside this local service.
  * 
- * Implementación que usa Ribbon
+ * Implementación que usa Ribbon programado y el restTemplate se construye
+ * mediante el builder por petición
  * 
  * @author Paul Chapman - Versión de Enrique Pedraza
  */

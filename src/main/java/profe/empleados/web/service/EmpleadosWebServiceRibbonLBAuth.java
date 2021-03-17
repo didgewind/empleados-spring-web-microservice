@@ -7,13 +7,9 @@ import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
-import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 
 import profe.empleados.web.model.Empleado;
@@ -21,20 +17,19 @@ import profe.empleados.web.service.exceptions.EmpleadosWebException;
 import profe.empleados.web.service.exceptions.EmpleadosWebNotAuthorizedException;
 import profe.empleados.web.service.exceptions.EmpleadosWebResourceDuplicatedException;
 import profe.empleados.web.service.exceptions.EmpleadosWebResourceNotFoundException;
-import profe.empleados.web.service.exceptions.RestTemplateErrorHandler;
 
 /**
  * Hide the access to the microservice inside this local service.
  * 
- * Implementación que usa Ribbon
+ * Implementación que usa Ribbon declarado con LoadBalanced
  * 
  * @author Paul Chapman - Versión de Enrique Pedraza
  */
 public class EmpleadosWebServiceRibbonLBAuth implements EmpleadosWebService {
 
 	@Autowired
-//	@LoadBalanced
-	private RestTemplate restTemplate;
+	@LoadBalanced
+	private RestOperations restTemplate;
 	
 	@Value("${app.serviceAlias}")
 	protected String serviceAlias;
@@ -43,6 +38,7 @@ public class EmpleadosWebServiceRibbonLBAuth implements EmpleadosWebService {
 			.getName());
 	
 	private String getBaseUrl() {
+		System.out.println("Accediendo al servicio desde ribbon declarado");
 		return "http://" + this.serviceAlias;
 	}
 	

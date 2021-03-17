@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.openfeign.FeignClientsConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -14,6 +15,8 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.annotation.RequestScope;
+import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.web.context.request.RequestContextListener;
 
 import profe.empleados.web.controllers.EmpleadosWebController;
@@ -26,7 +29,7 @@ import profe.empleados.web.validator.EmpleadoValidator;
 
 @SpringBootApplication
 //@EnableFeignClients(basePackages = "profe.empleados.web.service")
-@EnableDiscoveryClient
+@EnableEurekaClient
 @ComponentScan(useDefaultFilters = false) // Disable component scanner
 @Import(FeignClientsConfiguration.class)
 public class EmpleadosWebServer {
@@ -64,8 +67,9 @@ public class EmpleadosWebServer {
 	}
 	
 	@Bean
-//	@LoadBalanced
-	@Scope(value="request", proxyMode=ScopedProxyMode.TARGET_CLASS)
+	@LoadBalanced
+//	@Scope(value="request", proxyMode = ScopedProxyMode.INTERFACES)
+	@RequestScope // Shorcut de lo de arriba, pero con ScopedProxyMode.TARGET_CLASS
 	public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		return restTemplateBuilder
