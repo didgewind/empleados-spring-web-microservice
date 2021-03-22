@@ -40,7 +40,7 @@ public class EmpleadosWebServiceRibbon implements EmpleadosWebService {
 	protected RestTemplateBuilder restTemplateBuilder;
 	
 	@Autowired
-	private LoadBalancerClient loadBalancer;
+	protected LoadBalancerClient loadBalancer;
 	
 	@Value("${app.serviceAlias}")
 	protected String serviceAlias;
@@ -56,7 +56,7 @@ public class EmpleadosWebServiceRibbon implements EmpleadosWebService {
 				.build();
 	}
 
-	private String getBaseUrl() {
+	protected String getBaseUrl() {
 		ServiceInstance serviceInstance = loadBalancer.choose(this.serviceAlias);
 		logger.info("Estamos accediendo al servicio en " + serviceInstance.getUri());
 		return serviceInstance.getUri().toString();

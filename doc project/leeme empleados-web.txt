@@ -1,4 +1,6 @@
-Esta versión tira de spring boot 2.0
+Esta versión tira de spring boot 2.0. Añadimos la clase EmpleadosWebServiceRibbonWebClient
+para probar WebClient con llamadas bloqueantes y no bloqueantes (aunque esta última la bloqueamos
+de forma explícita para poder retornar un List<Empleado>)
 
 * empleados web (puerto 3333): app web con seguridad (profe o admin) que tira del microservicio anterior.
 Ahora mismo están funcionando los get, el insert, el update y el delete. Hemos modificado la forma de obtener 

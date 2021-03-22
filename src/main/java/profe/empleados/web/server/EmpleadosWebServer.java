@@ -14,6 +14,7 @@ import profe.empleados.web.controllers.HomeController;
 import profe.empleados.web.security.EmpleadosWebSecurityConfig;
 import profe.empleados.web.service.EmpleadosWebService;
 import profe.empleados.web.service.EmpleadosWebServiceRibbon;
+import profe.empleados.web.service.EmpleadosWebServiceRibbonWebClient;
 import profe.empleados.web.validator.EmpleadoValidator;
 
 @SpringBootApplication
@@ -48,7 +49,7 @@ public class EmpleadosWebServer {
 
 	@Bean
 	public EmpleadosWebService webService() {
-		return new EmpleadosWebServiceRibbon();
+		return new EmpleadosWebServiceRibbonWebClient();
 	}
 
 	@Bean

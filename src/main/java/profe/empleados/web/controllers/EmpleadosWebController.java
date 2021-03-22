@@ -145,6 +145,7 @@ public class EmpleadosWebController {
 	@ExceptionHandler(Exception.class)
 	public ModelAndView handleError(HttpServletRequest req, Exception ex) {
 		logger.severe("Request: " + req.getRequestURL() + " raised " + ex);
+		ex.printStackTrace();
 
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("mensaje", "Error al ejecutar la operación. Por favor, inténtelo de nuevo más tarde");

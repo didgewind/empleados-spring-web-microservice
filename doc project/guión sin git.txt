@@ -1,0 +1,45 @@
+- Qué son microservicios
+- Beneficios. Por qué se usan
+- Arquitectura típica
+- Qué son Spring Boot y Spring Cloud
+- Fundamentos de Spring Boot (parent pom, starters, convención vs configuración)
+- Tres formas de crear el skeleton de un proyecto spring boot:
+	- initializer (web)
+	- spring boot cli
+	- proyecto maven (skip archetype selection)
+	
+- Primer ejemplo: Hello Rest! (usar curl o cliente navegador)
+- Empaquetar el jar y lanzarlo desde la consola (goal package)
+
+	java -jar target/myapplication-0.0.1-SNAPSHOT.jar
+	
+	(Para lanzar con debug, https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#using-boot-running-as-a-packaged-application)
+	
+- Crear cliente web con RestTemplate (new RestTemplate)
+
+- Microservicio de empleados tirando de bd local o la bd en mi equipo con bds diferentes para 
+cada alumno (el script de generación de bds para 15 alumnos está en la carpeta bd) del proyecto empleados spring-boot
+commit Corregido token mal formado y db múltiples)
+
+- Cliente web de empleados
+- Eureka Server. Registrar servicios y buscar con DiscoveryService
+	(branch services_varios)
+- Ejercicio: Crear microservicio de departamentos (ver proyecto). Añadir a la app web
+un DepartamentosController que recupere todos los departamentos y los muestre en una
+jsp con sus empleados (branch departamentos)
+- Control de errores (con try... catch y RestTemplateErrorHandler. Uso del RestTemplateBuilder para construir el RestTemplate de forma dinámica)
+- Cliente web más complejo (con formulario y 5 botones)
+- Explicar Ribbon y @LoadBalanced. Lanzar varias instancias del servicio (cuidado porque aquí el serviceAlias tiene que
+llevar http:// delante)
+- Configuración de Ribbon. Cambiar entre RoundRobin y Random rules
+- Utilizar el LoadBalancerClient directamente
+- Reintentos con spring retry
+- Seguridad básica. 
+- Ribbon con autenticación. Uso del RestTemplateBuilder para construir el RestTemplate de forma dinámica
+- Autenticación con jwt
+- Hystrix
+- Transacciones
+- Feign (seg cableada)
+- Feign con cliente instanciado manualmente (con autenticación)
+
+
