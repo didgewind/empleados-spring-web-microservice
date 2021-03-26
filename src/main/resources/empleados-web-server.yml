@@ -21,7 +21,9 @@ eureka:
   client:
     enabled: true
     serviceUrl:
-      defaultZone: http://localhost:1111/eureka/
+      # Al ejecutar desde docker activaremos EUREKA_SERVER así:
+      # ENTRYPOINT ["java", "-DEUREKA_SERVER=http://eureka-service:1111/eureka","-jar","/empleados-rest-0.0.1-SNAPSHOT.jar"]
+      defaultZone: ${EUREKA_SERVER:http://localhost:1111/eureka/}
     registerWithEureka: false
 
 # HTTP Server

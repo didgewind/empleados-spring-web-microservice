@@ -1,5 +1,20 @@
 Esta versión tira de spring boot 2.0
 
+Además en este branch hemos añadido un Dockerfile para poder lanzar desde docker.
+Tenemos que empaquetar la app, dockerizarla (desde external tools o con el comando
+docker build -t empleados-web-manual-build .) y luego lanzarla con
+docker run --rm --net empleados-bridge -d -p 3333:3333 --name empleados-web empleados-web-manual-build
+
+Previamente hemos creado la network empleados-bridge con el comando
+
+	docker network create empleados-bridge
+
+Estamos exponiendo el puerto 3333 en el host para poder acceder desde fuera de docker
+con 3333:3333
+
+El primer 3333 es el puerto externo en el que quiero exponer la aplicación (si lo omito
+se asigna uno aleatorio). El segundo 3333 es el puerto interno que quiero exponer.
+
 * empleados web (puerto 3333): app web con seguridad (profe o admin) que tira del microservicio anterior.
 Ahora mismo están funcionando los get, el insert, el update y el delete. Hemos modificado la forma de obtener 
 el RestTemplate
