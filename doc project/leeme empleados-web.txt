@@ -1,13 +1,19 @@
 Esta versión tira de spring boot 2.0
 
-Además en este branch hemos añadido un Dockerfile para poder lanzar desde docker.
+Utilizamos docker-compose para lanzar eureka, varias instancias de empleados-service
+y empleados-web. Hemos creado un fichero docker-compose.yml y lo lanzamos desde consola
+con docker-compose up -d --scale empleados-service=6. Para poder escalar un servicio
+definido en este fichero no podemos definir también un container name.
+
+En el commit anterior añadimos un Dockerfile para poder lanzar desde docker.
 Tenemos que empaquetar la app, dockerizarla (desde external tools o con el comando
 docker build -t empleados-web-manual-build .) y luego lanzarla con
 docker run --rm --net empleados-bridge -d -p 3333:3333 --name empleados-web empleados-web-manual-build
 
-Previamente hemos creado la network empleados-bridge con el comando
-
-	docker network create empleados-bridge
+Además hemos cambiado el fichero de configuración para que busque el servidor eureka
+en localhost o resuelva al container de docker en función de si se pasa un parámetro
+(con el nombre del container eureka) al arrancar la app. Este parámetro se lo pasamos en
+el Dockerfile.
 
 Estamos exponiendo el puerto 3333 en el host para poder acceder desde fuera de docker
 con 3333:3333

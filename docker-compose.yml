@@ -1,0 +1,32 @@
+version: '3.3'
+services:
+  eureka-service:
+    container_name: eureka-service
+    build:
+      context: ../eureka
+      dockerfile: Dockerfile
+    image: eureka-manual-build
+    ports: 
+      - 1111:1111
+    networks:
+      - empleados-bridge
+  empleados-service:
+    build:
+      context: ../empleados spring-boot
+      dockerfile: Dockerfile
+    image: empleados-manual-build
+    networks:
+      - empleados-bridge
+  empleados-web-service:
+    container_name: empleados-web-service
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: empleados-web-manual-build
+    ports: 
+      - 3333:3333
+    networks:
+      - empleados-bridge
+networks:
+  empleados-bridge: {}
+    
