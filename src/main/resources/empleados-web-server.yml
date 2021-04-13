@@ -7,39 +7,11 @@ spring:
      view:
        prefix: /jsp/
        suffix: .jsp
-# Ribbon retries on
-#  cloud:
-#    loadbalancer:
-#      retry: true
-      
-# Discovery Server Access
-#  1. Define URL of registration server (defaultZone)
-#  2. Reduce lease-renewal time so processes register more quickly
-eureka:
-  instance:
-     leaseRenewalIntervalInSeconds: 5   # DO NOT DO THIS IN PRODUCTION
-  client:
-    enabled: true
-    serviceUrl:
-      # Al ejecutar desde docker activaremos EUREKA_SERVER así:
-      # ENTRYPOINT ["java", "-DEUREKA_SERVER=http://eureka-service:1111/eureka","-jar","/empleados-rest-0.0.1-SNAPSHOT.jar"]
-      defaultZone: ${EUREKA_SERVER:http://localhost:1111/eureka/}
-    registerWithEureka: false
+
 
 # HTTP Server
 server:
   port: 3333   # HTTP (Tomcat) port
-
-# Config de ribbon
-#empleados-service:
-#  ribbon:
-  # Estrategia de balanceo. Si no especificamos ninguna por defecto es RoundRobinRule 
-#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.WeightedResponseTimeRule
-#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule
-  # Configuración de retries
-#    MaxAutoRetries: 1
-#    MaxAutoRetriesNextServer: 1
-#    OkToRetryOnAllOperations: true
 
 # Config propia
 app:
