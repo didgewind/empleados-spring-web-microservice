@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: empleados-web
+  name: empleados-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: empleados-web
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: empleados-web
+    spec:
+      containers:
+      - image: empleados-web
+        imagePullPolicy: Never
+        name: empleados-web
+        ports:
+        - containerPort: 3333
+        resources: {}
+status: {}
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: empleados-web-service
+  name: empleados-web-service
+spec:
+  ports:
+  - name: 3333-3333
+    port: 3333
+    protocol: TCP
+    targetPort: 3333
+  selector:
+    app: empleados-web-service
+  type: ClusterIP
+status:
+  loadBalancer: {}

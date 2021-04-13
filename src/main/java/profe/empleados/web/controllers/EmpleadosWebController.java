@@ -1,11 +1,13 @@
 package profe.empleados.web.controllers;
 
-import java.util.logging.Logger;
+
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,8 +31,7 @@ import profe.empleados.web.service.exceptions.EmpleadosWebResourceNotFoundExcept
 @RequestMapping("/gestEmpleados")
 public class EmpleadosWebController {
 
-	protected Logger logger = Logger.getLogger(EmpleadosWebController.class
-			.getName());
+	protected Logger logger = LoggerFactory.getLogger(EmpleadosWebController.class);
 	
 	@Autowired
 	private EmpleadosWebService service;
@@ -144,7 +145,7 @@ public class EmpleadosWebController {
 	
 	@ExceptionHandler(Exception.class)
 	public ModelAndView handleError(HttpServletRequest req, Exception ex) {
-		logger.severe("Request: " + req.getRequestURL() + " raised " + ex);
+		logger.error ("Request: " + req.getRequestURL() + " raised " + ex, ex);
 
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("mensaje", "Error al ejecutar la operación. Por favor, inténtelo de nuevo más tarde");

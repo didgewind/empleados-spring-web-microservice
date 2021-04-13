@@ -8,8 +8,6 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -55,7 +53,7 @@ public class EmpleadosWebServiceKubernetes implements EmpleadosWebService {
 	}
 
 	private String getBaseUrl() {
-		return "http://" + empleadosServiceAlias + ":5555/empleados/";
+		return "http://" + empleadosServiceAlias + ":5555";
 	}
 	
 

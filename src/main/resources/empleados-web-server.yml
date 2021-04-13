@@ -16,3 +16,8 @@ server:
 # Config propia
 app:
   serviceAlias: empleados-service
+  
+# Desabilitamos eureka en ribbon, a ver si así al desplegar en kubernetes deja de usar el discovery client
+ribbon:
+  eureka:
+   enabled: false

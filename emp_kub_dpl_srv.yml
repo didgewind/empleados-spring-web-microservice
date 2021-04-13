@@ -1,0 +1,49 @@
+# Éste es el fichero creado por kind con el deployment y el service
+# a partir de https://www.katacoda.com/springguides/scenarios/install-kubernetes
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: empleados-service
+  name: empleados-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: empleados-service
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: empleados-service
+    spec:
+      containers:
+      - image: empleados-service-sin-eureka
+        imagePullPolicy: Never
+        name: empleados-service-sin-eureka
+        ports:
+        - containerPort: 5555
+        resources: {}
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: empleados-service
+  name: empleados-service
+spec:
+  ports:
+  - name: 5555-5555
+    port: 5555
+    protocol: TCP
+    targetPort: 5555
+  selector:
+    app: empleados-service
+  type: ClusterIP
+status:
+  loadBalancer: {}
