@@ -128,7 +128,7 @@ public class EmpleadosWebServiceRibbon implements EmpleadosWebService, Departame
 	}
 
 	@Override
-	public List<Departamento> getAllDepartamentos() {
+	public Departamento[] getAllDepartamentos() {
 		RestTemplate rt = new RestTemplate();
 		Departamento[] departamentos = rt.getForObject("http://localhost:7777/departamentos", Departamento[].class);
 		Stream.of(departamentos).forEach(dep -> {
@@ -136,7 +136,7 @@ public class EmpleadosWebServiceRibbon implements EmpleadosWebService, Departame
 			dep.getEmpleados().stream().forEach(System.out::print);
 			System.out.println();
 		});
-		return Arrays.asList(departamentos);
+		return departamentos;
 	}
 
 }

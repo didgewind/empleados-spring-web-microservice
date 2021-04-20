@@ -1,12 +1,13 @@
 Esta versión tira de spring boot 2.0
 
 * empleados web (puerto 3333): app web con seguridad (profe o admin) que tira de los microservicios
-de empleados y departamentos. Ahora mismo están funcionando los get, el insert, el update y el delete.
+de empleados y departamentos. El acceso a empleados está capado porque no hay versión
+de este microservicio que trabaje con oauth2 (habría que implementarlo igual que en
+departamentos).
 
-La seguridad en esta rama la implementamos con oauth2. Es importante notar que en este commit
-oauth2 lo usamos únicamente para autenticar / autorizar al usuario para acceder a la app web,
-y no a alguno de los servicios. DUDA: ¿PUEDO ACCEDER A EMPLEADOS EN ESTE COMMIT? CREO QUE NO,
-QUE SÓLO PUEDO ACCEDER A DEPARTAMENTOS, QUE NO REQUIERE AUTORIZACIÓN DE NINGÚN TIPO.
+La seguridad en esta rama la implementamos con oauth2. En este commit usamos un Grant
+Type Authorization Code, igual que en el commit anterior, pero ahora usamos las credenciales
+finales para acceder al servicio de departamentos.
 
 Tenemos un servidor de autenticación
 (oauth2) contra el que nos autenticamos y de donde obtenemos el Principal con una llamada
@@ -19,8 +20,8 @@ Principal que se ha autenticado (mediante una consulta a su url /auth/user, defi
 con la clave security.oauth2.resource.userInfoUri=http://localhost:9999/auth/user. Sobre ese 
 Principal se aplicarán las políticas de autorización definidas en la configuración de seguridad.
 
-El siguiente paso sería poder reutilizar este token para realizar llamadas al servicio de
-departamentos (y al de empleados cuando lo tengamos configurado de esta manera).
+Más tarde reutilizamos estas credenciales para acceder al servicio de departamentos
+(con la clase DepartamentosServiceOAuth2)
 
 Hay que hacer notar que ahora los usuarios, roles y passwords se declaran únicamente en el server
 de autenticación. El resto de servicios definen únicamente las autorizaciones en función de roles.

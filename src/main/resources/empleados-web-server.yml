@@ -61,7 +61,8 @@ server:
 # Config propia
 app:
   serviceAlias: empleados-service
-  dptServiceAlias: departamentos-service
+  departamentosServiceAlias: departamentos-service
+  departamentosServiceUrl: http://localhost:7777/departamentos/
   
 
   

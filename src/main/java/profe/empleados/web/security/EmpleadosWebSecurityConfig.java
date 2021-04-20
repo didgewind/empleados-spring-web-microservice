@@ -26,12 +26,14 @@ public class EmpleadosWebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 			.authorizeRequests()
 			.antMatchers("/gestEmpleados", "/gestEmpleados*").hasAnyRole("USER", "ADMIN")
-			.antMatchers("/gestDepartamentos", "/gestDepartamentos*").hasRole("ADMIN")
+			/*
+			 * Para el antMachers a continuación, hasAnyRole("ADMIN") y hasRole("ADMIN") no funcionan.
+			 * Si queremos entrar como admin hay que usar hasAnyRole("USER", "ADMIN")
+			 */
+			.antMatchers("/gestDepartamentos", "/gestDepartamentos*").hasAnyRole("USER", "ADMIN")
 				.anyRequest().permitAll()
 				.and()
-	            .oauth2Login();
-//				.and()
-	//		.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/");			
+	            .oauth2Login();			
 	}
 	
 	/*

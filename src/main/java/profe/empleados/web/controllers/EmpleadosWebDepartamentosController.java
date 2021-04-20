@@ -1,6 +1,8 @@
 package profe.empleados.web.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,8 +14,13 @@ import profe.empleados.web.service.DepartamentosService;
 @RequestMapping("/gestDepartamentos")
 public class EmpleadosWebDepartamentosController {
 
-	@Autowired
+	@Resource(name="departamentosService")
 	private DepartamentosService service;
+	
+	@PostConstruct
+	public void init() {
+		int i = 8;
+	}
 	
 	@GetMapping
 	public String muestraDepartamentos(Model model) {

@@ -13,6 +13,8 @@ import profe.empleados.web.controllers.EmpleadosWebController;
 import profe.empleados.web.controllers.EmpleadosWebDepartamentosController;
 import profe.empleados.web.controllers.HomeController;
 import profe.empleados.web.security.EmpleadosWebSecurityConfig;
+import profe.empleados.web.service.DepartamentosService;
+import profe.empleados.web.service.DepartamentosServiceOAuth2;
 import profe.empleados.web.service.EmpleadosWebService;
 import profe.empleados.web.service.EmpleadosWebServiceRibbon;
 import profe.empleados.web.validator.EmpleadoValidator;
@@ -55,6 +57,11 @@ public class EmpleadosWebServer {
 	@Bean
 	public EmpleadosWebService webService() {
 		return new EmpleadosWebServiceRibbon();
+	}
+
+	@Bean
+	public DepartamentosService departamentosService() {
+		return new DepartamentosServiceOAuth2();
 	}
 
 	@Bean
