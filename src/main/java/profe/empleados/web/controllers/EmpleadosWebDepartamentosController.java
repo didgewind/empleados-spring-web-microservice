@@ -6,17 +6,17 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import profe.empleados.web.service.EmpleadosWebService;
+import profe.empleados.web.service.DepartamentosService;
 
 @Controller
 @RequestMapping("/gestDepartamentos")
 public class EmpleadosWebDepartamentosController {
 
 	@Autowired
-	private EmpleadosWebService service;
+	private DepartamentosService service;
 	
 	@GetMapping
-	public String muestraForm(Model model) {
+	public String muestraDepartamentos(Model model) {
 		model.addAttribute("departamentos", service.getAllDepartamentos());
 		return "departamentos";
 	}

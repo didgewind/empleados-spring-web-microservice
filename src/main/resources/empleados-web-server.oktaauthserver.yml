@@ -13,10 +13,10 @@ spring:
       client:
         registration:
           custom-client:
-            client-id: empleados
-            client-secret: empleadossecret
+            client-id: R2dpxQ3vPrtfgF72
+            client-secret: fDw7Mpkk5czHNuSRtmhGmAGL42CaxQB9
             client-name: Auth Server
-            scope: oicd
+            scope: user_info
             provider: custom-provider
             redirect-uri: http://localhost:3333/login/oauth2/code/
 #            redirect-uri: http://example.com
@@ -24,9 +24,9 @@ spring:
             authorization-grant-type: authorization_code
         provider:
           custom-provider:
-            token-uri: http://localhost:9999/auth/oauth/token
-            authorization-uri: http://localhost:9999/auth/oauth/authorize
-            user-info-uri: http://localhost:9999/auth/user
+            token-uri: http://localhost:8081/auth/oauth/token
+            authorization-uri: http://localhost:8081/auth/oauth/authorize
+            user-info-uri: http://localhost:8081/auth/user/me
             user-name-attribute: name
 
       

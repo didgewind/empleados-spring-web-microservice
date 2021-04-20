@@ -120,10 +120,4 @@ public class EmpleadosWebServiceFeign implements EmpleadosWebService {
 		
 	}
 
-	@Override
-	public List<Departamento> getAllDepartamentos() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

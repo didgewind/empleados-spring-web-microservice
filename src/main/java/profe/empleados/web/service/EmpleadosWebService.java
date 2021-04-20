@@ -22,7 +22,5 @@ public interface EmpleadosWebService {
 
 	void modificaEmpleado(Empleado empleado) 
 			throws EmpleadosWebNotAuthorizedException, EmpleadosWebResourceNotFoundException;
-	
-	List<Departamento> getAllDepartamentos();
 
 }

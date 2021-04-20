@@ -1,16 +1,29 @@
 Esta versión tira de spring boot 2.0
 
-* empleados web (puerto 3333): app web con seguridad (profe o admin) que tira del microservicio anterior.
-Ahora mismo están funcionando los get, el insert, el update y el delete. Hemos modificado la forma de obtener 
-el RestTemplate
-para poder propagar el usuario autenticado en el servidor web al servidor rest (es decir, utilizar el usuario
-que está haciendo esa llamada en ese momento). Hay que hacer notar que para ello hay que configurar el
-AuthenticationManagerBuilder (en la clase de config de seguridad) con eraseCredentials(false), para
-que no elimine el password del Authentication nada más hacer el login, y así poder acceder a él
-en cada petición que redirigamos al servidor Rest. También hemos dejado de utilizar @LoadBalanced porque
-los únicos ejemplos que encontramos siempre inyectan el RestTemplate, y para utilizar autenticación
-dinámica hay que instanciar el RestTemplate por cada petición. Quizás se podría mirar lo de los beans
-proxy-scoped...
+* empleados web (puerto 3333): app web con seguridad (profe o admin) que tira de los microservicios
+de empleados y departamentos. Ahora mismo están funcionando los get, el insert, el update y el delete.
+
+La seguridad en esta rama la implementamos con oauth2. Es importante notar que en este commit
+oauth2 lo usamos únicamente para autenticar / autorizar al usuario para acceder a la app web,
+y no a alguno de los servicios. DUDA: ¿PUEDO ACCEDER A EMPLEADOS EN ESTE COMMIT? CREO QUE NO,
+QUE SÓLO PUEDO ACCEDER A DEPARTAMENTOS, QUE NO REQUIERE AUTORIZACIÓN DE NINGÚN TIPO.
+
+Tenemos un servidor de autenticación
+(oauth2) contra el que nos autenticamos y de donde obtenemos el Principal con una llamada
+implícita (lo hace por debajo el código spring) a la url que mencionamos más abajo. El flujo
+de autenticación es, al intentar acceder a una zona protegida de la app el spring oauth2
+salta y se conecta con el server de autenticación. Tras autenticarnos el propio server nos
+pregunta si autorizamos a la app a acceder a nuestros recursos, e internamente negocia con
+la app web la obtención del código de autorización, el token de acceso y seguidamente el
+Principal que se ha autenticado (mediante una consulta a su url /auth/user, definida en el .yml 
+con la clave security.oauth2.resource.userInfoUri=http://localhost:9999/auth/user. Sobre ese 
+Principal se aplicarán las políticas de autorización definidas en la configuración de seguridad.
+
+El siguiente paso sería poder reutilizar este token para realizar llamadas al servicio de
+departamentos (y al de empleados cuando lo tengamos configurado de esta manera).
+
+Hay que hacer notar que ahora los usuarios, roles y passwords se declaran únicamente en el server
+de autenticación. El resto de servicios definen únicamente las autorizaciones en función de roles.
 
 También estamos usando Feign (peticiones rest declarativas). Creamos el cliente Feign manualmente
 por cada petición, para poder propagar las credenciales.

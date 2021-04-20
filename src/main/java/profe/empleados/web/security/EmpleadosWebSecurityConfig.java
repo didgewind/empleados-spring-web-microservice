@@ -1,39 +1,37 @@
 package profe.empleados.web.security;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @EnableWebSecurity
 @Configuration
+@Order(90)
 public class EmpleadosWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-	@Autowired
+/*	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 		auth.eraseCredentials(false)	// Para reutilizar las credenciales para acceder a los microservicios
 			.inMemoryAuthentication()
 			.withUser("profe").password("{noop}profe").roles("USER")
 				.and()
 			.withUser("admin").password("{noop}admin").roles("ADMIN");
-	}
+	}*/
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 			.authorizeRequests()
-				.antMatchers("/gestEmpleados", "/gestEmpleados*").hasAnyRole("USER", "ADMIN")
+			.antMatchers("/gestEmpleados", "/gestEmpleados*").hasAnyRole("USER", "ADMIN")
+			.antMatchers("/gestDepartamentos", "/gestDepartamentos*").hasRole("ADMIN")
 				.anyRequest().permitAll()
 				.and()
-			.formLogin()
-				.and()
-			.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/");			
+	            .oauth2Login();
+//				.and()
+	//		.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/");			
 	}
 	
 	/*
