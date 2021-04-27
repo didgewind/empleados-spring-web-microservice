@@ -20,7 +20,7 @@
  	<parent>
 		<groupId>org.springframework.cloud</groupId>
 		<artifactId>spring-cloud-starter-parent</artifactId>
-		<version>Greenwich.RELEASE</version>
+		<version>Hoxton.RELEASE</version>
     </parent>
 
     <dependencies>

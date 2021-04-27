@@ -5,6 +5,9 @@ de empleados y departamentos. El acceso a empleados está capado porque no hay v
 de este microservicio que trabaje con oauth2 (habría que implementarlo igual que en
 departamentos).
 
+Este commit está sin terminar, tendría que mirar el código para ver qué quiero hacer
+y qué falta.
+
 La seguridad en esta rama la implementamos con oauth2. En este commit usamos un Grant
 Type Authorization Code, igual que en el commit anterior, pero ahora usamos las credenciales
 finales para acceder al servicio de departamentos.
